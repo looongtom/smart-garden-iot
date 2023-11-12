@@ -10,7 +10,12 @@ import datetime
 import imutils
 import time
 import cv2
+import paho.mqtt.client as mqtt
 
+# MQTT broker information
+mqtt_broker = "192.168.1.10"
+mqtt_port = 1883
+mqtt_topic = "iot"
 
 
 # initialize the output frame and a lock used to ensure thread-safe
@@ -30,25 +35,25 @@ from flask import Flask, request,render_template, redirect, url_for,jsonify
 
 received_data = {}  # Create a global variable to store received data
 
-@app.route('/data', methods=['POST'])
-def receive_data():
-    if request.method == 'POST':
-        # data = request.json  # Assuming the data sent by ESP8266 is in JSON format
-        data = request.json  # Assuming the data sent by ESP8266 is in JSON format
+def on_connect(client, userdata, flags, rc):
+    print(f"Connected with result code {rc}")
+    client.subscribe(mqtt_topic)
 
-        print("Received data from ESP8266:")
-        print(data)
+def on_message(client, userdata, msg):
+    global received_data
+    payload = msg.payload.decode()
+    print(f"Received message on topic {msg.topic}: {payload}")
+    # Update data dictionary with received JSON
+    received_data = payload
 
-        # Here, you can process the received data as needed
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_message = on_message
 
-        # return "Data received successfully", 200  # Respond with an acknowledgment
-        
-        global received_data
-        received_data = data
+client.connect(mqtt_broker, mqtt_port, 60)
 
-        # Redirect to the index() function to render the HTML template
-        return redirect(url_for('index'))
-
+# Start MQTT loop in a separate thread
+client.loop_start()
 
 @app.route('/')
 def index():
