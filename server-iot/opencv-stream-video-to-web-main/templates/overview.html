@@ -134,7 +134,7 @@
 						<ul class="nav navbar-nav navbar-left">
 							<li>
 								<a href="#">
-									<button id="autoModeButton" class="center btn btn-success btn-fill btn-wd">Chế độ tự
+									<button id="autoModeButton" class="center btn btn-danger btn-fill btn-wd">Chế độ tự
 										động</button>
 								</a>
 
@@ -421,7 +421,7 @@
 </html>
 
 <script>
-
+	var buttonClick=false;
 	function generateLabels() {
 		var labels = [];
 		var now = new Date();
@@ -450,38 +450,22 @@
 			const pumpStatus = data.pump_status;
 			const autoModeStatus = data.autoMode;
 
-			
 
-			// if (lightStatus === "1") {
-			// 	console.log("Light on");
+			// document.getElementById('autoModeButton').textContent = "Chế độ tự động: " + autoModeStatus;
 
-			// 	// If lightStatus is "1", update the button with id "controlButton1" to selected
-			// 	lightMessage.textContent = "Đèn quang hợp đang bật";
-			// 	lightMessage.style.color = "green";
-
-			// } else if (lightStatus === "0") {
-			// 	console.log("Light off");
-			// 	// If lightStatus is "0", update the button to unselected
-			// 	lightMessage.textContent = "Đèn quang hợp đang tắt";
-			// 	lightMessage.style.color = "red";
+			// if(autoModeStatus==="ON"){
+			// 	buttonClick=true;
+			// }else{
+			// 	buttonClick=false;
 			// }
-
-			// if (pumpStatus === "1") {
-			// 	console.log("Pump on");
-
-			// 	// If lightStatus is "1", update the button with id "controlButton1" to selected
-			// 	pumpMessage.textContent = "Máy bơm đang bật";
-			// 	pumpMessage.style.color = "green";
-
-			// } else if (pumpStatus === "0") {
-			// 	console.log("Pump off");
-			// 	// If lightStatus is "0", update the button to unselected
-			// 	pumpMessage.textContent = "Máy bơm đang tắt";
-			// 	pumpMessage.style.color = "red";
-			// }
-			document.getElementById('autoModeButton').textContent = "Chế độ tự động: " + autoModeStatus;
-			document.getElementById('lightMessage').textContent='Đèn quang hợp đang '+data.light_status;
-			document.getElementById('pumpMessage').textContent='Máy bơm đang '+data.pump_status;
+			if(buttonClick){
+				document.getElementById('autoModeButton').textContent = "Chế độ tự động: ON";
+				console.log("Auto mode on");
+				document.getElementById('lightMessage').textContent='Đèn quang hợp đang '+data.light_status;
+				document.getElementById('pumpMessage').textContent='Máy bơm đang '+data.pump_status;
+			}else{
+				document.getElementById('autoModeButton').textContent = "Chế độ tự động: OFF";
+			}
 			document.getElementById('do_am').textContent = `Do Am: ` + data.do_am + `%`;
 			document.getElementById("nhiet_do").textContent = "Nhiet Do: " + data.nhiet_do + '°C';
 			document.getElementById("do_am_dat").textContent = "Do Am Dat: " + data.do_am_dat + `%`;
@@ -706,6 +690,8 @@
 
 	// Hàm gọi AJAX
 	function handleClickManualOn() {
+		buttonClick=true;
+		console.log("====================Auto mode ========================"+buttonClick);
 		var autoModeButton = document.getElementById('autoModeButton');
 		if (autoModeButton) {
 			// Update the class from "btn-success" to "btn-danger"
@@ -746,6 +732,8 @@
 	}
 
 	function handleClickManualOff() {
+		buttonClick=false;
+		console.log("====================Auto mode ========================"+buttonClick);
 		var autoModeButton = document.getElementById('autoModeButton');
 		if (autoModeButton) {
 			// Update the class from "btn-success" to "btn-danger"
@@ -784,7 +772,7 @@
 
 	function handleClickLightOn() {
 		var lightMessage = document.getElementById('lightMessage');
-		// lightMessage.textContent = "Đèn quang hợp đang ON";
+		lightMessage.textContent = "Đèn quang hợp đang ON";
 		lightMessage.setAttribute("style", "color: green");
 
 		fetch('/turn_on_relay2', {
@@ -809,7 +797,7 @@
 
 	function handleClickLightOff() {
 		var lightMessage = document.getElementById('lightMessage');
-		// lightMessage.textContent = "Đèn quang hợp đang OFF";
+		lightMessage.textContent = "Đèn quang hợp đang OFF";
 		lightMessage.setAttribute("style", "color: red");
 		
 		fetch('/turn_off_relay2', {
@@ -834,7 +822,7 @@
 
 	function handleClickPumptOn() {
 		var pumpMessage = document.getElementById('pumpMessage');
-		// pumpMessage.textContent = "Máy bơm đang ON";
+		pumpMessage.textContent = "Máy bơm đang ON";
 		pumpMessage.setAttribute("style", "color: green");
 		fetch('/turn_on_relay1', {
 			method: 'POST',
@@ -858,7 +846,7 @@
 
 	function handleClickPumptOff() {
 		var pumpMessage = document.getElementById('pumpMessage');
-		// pumpMessage.textContent = "Máy bơm đang OFF";
+		pumpMessage.textContent = "Máy bơm đang OFF";
 		pumpMessage.setAttribute("style", "color: red");
 		fetch('/turn_off_relay1', {
 			method: 'POST',
