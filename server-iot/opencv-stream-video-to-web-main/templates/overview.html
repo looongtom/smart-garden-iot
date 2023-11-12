@@ -133,14 +133,18 @@
 
 						<ul class="nav navbar-nav navbar-left">
 							<li>
-								<a href="#"><button class="center btn btn-success btn-fill btn-wd">Chế độ tự
-										động</button></a>
+								<a href="#">
+									<button class="center btn btn-success btn-fill btn-wd">Chế độ tự động</button>
+								</a>
 							</li>
-							<li><a>
-									<div class="pull-right">
-
-										<input type="checkbox" class="switch" id="waterCheckbox" />
-									</div>
+							<li>
+								<a href="#">
+									<button class="btn btn-success" onclick="handleClickManualOn()">Bật</button>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<button class="btn btn-danger" onclick="handleClickManualOff()">Tắt</button>
 								</a>
 							</li>
 						</ul>
@@ -205,10 +209,8 @@
 								<div class="card-footer">
 									<hr />
 									Đèn Led
-									<div class="pull-right">
-										<input type="checkbox" class="switch" id="lightCheckbox"
-											onclick="submitForm('light')" />
-									</div>
+										<button class="btn btn-success mb-1" onclick="handleClickRelay1On()">Bật</button>
+										<button class="btn btn-danger" onclick="handleClickRelay1Off()">Tắt</button>
 								</div>
 							</div>
 						</div>
@@ -233,10 +235,8 @@
 									<hr />
 									<div class="stats">
 										Máy Bơm
-										<div class="pull-right">
-											<input type="checkbox" class="switch" id="waterCheckbox"
-												onclick="submitForm('water')" />
-										</div>
+										<button class="btn btn-success mb-1" onclick="handleClickRelay2On()">Bật</button>
+										<button class="btn btn-danger" onclick="handleClickRelay2Off()">Tắt</button>
 									</div>
 								</div>
 							</div>
@@ -658,5 +658,86 @@
 		document.body.appendChild(form);
 		form.submit();
 	}
+
+// Hàm gọi AJAX
+function handleClickManualOn() {
+	link = "http://127.0.0.1:5000/MANUAL=ON";
+	console.log(link);
+  $.ajax({
+	type: 'GET',
+	url: link,
+	xhrFields: {
+		responseType: 'blob'
+	},
+})
+
+}
+
+function handleClickManualOff() {
+	link = "http://127.0.0.1:5000/MANUAL=OFF";
+	console.log(link);
+  $.ajax({
+	type: 'GET',
+	url: link,
+	xhrFields: {
+		responseType: 'blob'
+	},
+})
+
+}
+
+function handleClickRelay1On() {
+	link = "http://127.0.0.1:5000/RELAY1=ON";
+	console.log(link);
+  $.ajax({
+	type: 'GET',
+	url: link,
+	xhrFields: {
+		responseType: 'blob'
+	},
+})
+
+}
+
+function handleClickRelay1Off() {
+	link = "http://127.0.0.1:5000/RELAY1=OFF";
+	console.log(link);
+  $.ajax({
+	type: 'GET',
+	url: link,
+	xhrFields: {
+		responseType: 'blob'
+	},
+})
+
+}
+
+function handleClickRelay2On() {
+	link = "http://127.0.0.1:5000/RELAY2=ON";
+	console.log(link);
+  $.ajax({
+	type: 'GET',
+	url: link,
+	xhrFields: {
+		responseType: 'blob'
+	},
+})
+
+}
+
+function handleClickRelay2Off() {
+	link = "http://127.0.0.1:5000/RELAY2=OFF";
+	console.log(link);
+  $.ajax({
+	type: 'GET',
+	url: link,
+	xhrFields: {
+		responseType: 'blob'
+	},
+})
+
+}
+
+
 
 </script>
