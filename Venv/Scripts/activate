@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="D:\IOT\video_capture\Venv"
+VIRTUAL_ENV="E:\IOT\smart-garden-iot\Venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

@@ -134,8 +134,10 @@
 						<ul class="nav navbar-nav navbar-left">
 							<li>
 								<a href="#">
-									<button class="center btn btn-success btn-fill btn-wd">Chế độ tự động</button>
+									<button id="autoModeButton" class="center btn btn-success btn-fill btn-wd">Chế độ tự
+										động</button>
 								</a>
+
 							</li>
 							<li>
 								<a href="#">
@@ -208,9 +210,13 @@
 								</div>
 								<div class="card-footer">
 									<hr />
-									Đèn Led
-										<button class="btn btn-success mb-1" onclick="handleClickRelay1On()">Bật</button>
-										<button class="btn btn-danger" onclick="handleClickRelay1Off()">Tắt</button>
+									<div class="stats">
+										<p id="lightMessage">Đèn quang hợp </p>
+										<button id="controlButton1" class="btn btn-success mb-1"
+											onclick="handleClickLightOn()">Bật</button>
+										<button id="controlButton2" class="btn btn-danger"
+											onclick="handleClickLightOff()">Tắt</button>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -234,9 +240,11 @@
 								<div class="card-footer">
 									<hr />
 									<div class="stats">
-										Máy Bơm
-										<button class="btn btn-success mb-1" onclick="handleClickRelay2On()">Bật</button>
-										<button class="btn btn-danger" onclick="handleClickRelay2Off()">Tắt</button>
+										<p id="pumpMessage">Máy Bơm </p>
+										<button id="controlButton3" class="btn btn-success mb-1"
+											onclick="handleClickPumptOn()">Bật</button>
+										<button id="controlButton4" class="btn btn-danger"
+											onclick="handleClickPumptOff()">Tắt</button>
 									</div>
 								</div>
 							</div>
@@ -432,31 +440,68 @@
 
 
 	// Function to fetch and update data
-	function fetchData() {
-		var xhr = new XMLHttpRequest();
-		xhr.open("GET", "/received_data", true);
+	async function fetchData() {
+		try {
+			const response = await fetch('/received_data');
+			const respData = await response.json();
+			const data = JSON.parse(respData);
 
-		xhr.onreadystatechange = function () {
-			if (xhr.readyState === 4 && xhr.status === 200) {
-				var data = JSON.parse(xhr.responseText);
-				document.getElementById("do_am").textContent = "Do Am: " + data.do_am;
-				document.getElementById("nhiet_do").textContent = "Nhiet Do: " + data.nhiet_do;
-				document.getElementById("do_am_dat").textContent = "Do Am Dat: " + data.do_am_dat;
-				document.getElementById("cuong_do_anh_sang").textContent = "Cuong Do Anh Sang: " + data.cuong_do_anh_sang;
+			const lightStatus = data.light_status;
+			const pumpStatus = data.pump_status;
+			const autoModeStatus = data.autoMode;
 
-				updateChartCuongDoAnhSang(data.cuong_do_anh_sang);
-				updateChartNhietDo(data.nhiet_do);
-				updateChartDoAm(data.do_am);
-				updateChartDoAmDat(data.do_am_dat);
-			}
-		};
+			
+
+			// if (lightStatus === "1") {
+			// 	console.log("Light on");
+
+			// 	// If lightStatus is "1", update the button with id "controlButton1" to selected
+			// 	lightMessage.textContent = "Đèn quang hợp đang bật";
+			// 	lightMessage.style.color = "green";
+
+			// } else if (lightStatus === "0") {
+			// 	console.log("Light off");
+			// 	// If lightStatus is "0", update the button to unselected
+			// 	lightMessage.textContent = "Đèn quang hợp đang tắt";
+			// 	lightMessage.style.color = "red";
+			// }
+
+			// if (pumpStatus === "1") {
+			// 	console.log("Pump on");
+
+			// 	// If lightStatus is "1", update the button with id "controlButton1" to selected
+			// 	pumpMessage.textContent = "Máy bơm đang bật";
+			// 	pumpMessage.style.color = "green";
+
+			// } else if (pumpStatus === "0") {
+			// 	console.log("Pump off");
+			// 	// If lightStatus is "0", update the button to unselected
+			// 	pumpMessage.textContent = "Máy bơm đang tắt";
+			// 	pumpMessage.style.color = "red";
+			// }
+			document.getElementById('autoModeButton').textContent = "Chế độ tự động: " + autoModeStatus;
+			document.getElementById('lightMessage').textContent='Đèn quang hợp đang '+data.light_status;
+			document.getElementById('pumpMessage').textContent='Máy bơm đang '+data.pump_status;
+			document.getElementById('do_am').textContent = `Do Am: ` + data.do_am + `%`;
+			document.getElementById("nhiet_do").textContent = "Nhiet Do: " + data.nhiet_do + '°C';
+			document.getElementById("do_am_dat").textContent = "Do Am Dat: " + data.do_am_dat + `%`;
+			document.getElementById("cuong_do_anh_sang").textContent = "Cuong Do Anh Sang: " + data.cuong_do_anh_sang + ' lux';
+
+			updateChartCuongDoAnhSang(data.cuong_do_anh_sang);
+			updateChartNhietDo(data.nhiet_do);
+			updateChartDoAm(data.do_am);
+			updateChartDoAmDat(data.do_am_dat);
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+
 		// updateChartCuongDoAnhSang(0);
 		// updateChartNhietDo(0);
 		// updateChartDoAm(0);
 		// updateChartDoAmDat(0);
-		xhr.send();
 	}
 
+	fetchData();
 	// Fetch and update data every 5 seconds (adjust the interval as needed)
 	setInterval(fetchData, 5000);
 
@@ -659,84 +704,180 @@
 		form.submit();
 	}
 
-// Hàm gọi AJAX
-function handleClickManualOn() {
-	link = "http://127.0.0.1:5000/MANUAL=ON";
-	console.log(link);
-  $.ajax({
-	type: 'GET',
-	url: link,
-	xhrFields: {
-		responseType: 'blob'
-	},
-})
+	// Hàm gọi AJAX
+	function handleClickManualOn() {
+		var autoModeButton = document.getElementById('autoModeButton');
+		if (autoModeButton) {
+			// Update the class from "btn-success" to "btn-danger"
+			autoModeButton.classList.remove('btn-danger');
+			autoModeButton.classList.add('btn-success');
 
-}
+			autoModeButton.textContent = "Chế độ tự động: ON";
 
-function handleClickManualOff() {
-	link = "http://127.0.0.1:5000/MANUAL=OFF";
-	console.log(link);
-  $.ajax({
-	type: 'GET',
-	url: link,
-	xhrFields: {
-		responseType: 'blob'
-	},
-})
+			var otherButton1 = document.getElementById('controlButton1');
+			var otherButton2 = document.getElementById('controlButton2');
+			var otherButton3 = document.getElementById('controlButton3');
+			var otherButton4 = document.getElementById('controlButton4');
 
-}
+			otherButton1.disabled = true;
+			otherButton2.disabled = true;
+			otherButton3.disabled = true;
+			otherButton4.disabled = true;
 
-function handleClickRelay1On() {
-	link = "http://127.0.0.1:5000/RELAY1=ON";
-	console.log(link);
-  $.ajax({
-	type: 'GET',
-	url: link,
-	xhrFields: {
-		responseType: 'blob'
-	},
-})
+		}
 
-}
+		fetch('/turn_on_auto', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+			.then(response => {
+				if (response.ok) {
+					console.log('Auto mode turn on successfully');
+				} else {
+					console.error('Error turning on Auto mode');
+				}
+			})
+			.catch(error => {
+				console.error('Error:', error);
+			});
 
-function handleClickRelay1Off() {
-	link = "http://127.0.0.1:5000/RELAY1=OFF";
-	console.log(link);
-  $.ajax({
-	type: 'GET',
-	url: link,
-	xhrFields: {
-		responseType: 'blob'
-	},
-})
+	}
 
-}
+	function handleClickManualOff() {
+		var autoModeButton = document.getElementById('autoModeButton');
+		if (autoModeButton) {
+			// Update the class from "btn-success" to "btn-danger"
+			autoModeButton.classList.remove('btn-success');
+			autoModeButton.classList.add('btn-danger');
 
-function handleClickRelay2On() {
-	link = "http://127.0.0.1:5000/RELAY2=ON";
-	console.log(link);
-  $.ajax({
-	type: 'GET',
-	url: link,
-	xhrFields: {
-		responseType: 'blob'
-	},
-})
+			autoModeButton.textContent = "Chế độ tự động: OFF";
 
-}
+			var otherButton1 = document.getElementById('controlButton1');
+			var otherButton2 = document.getElementById('controlButton2');
+			var otherButton3 = document.getElementById('controlButton3');
+			var otherButton4 = document.getElementById('controlButton4');
 
-function handleClickRelay2Off() {
-	link = "http://127.0.0.1:5000/RELAY2=OFF";
-	console.log(link);
-  $.ajax({
-	type: 'GET',
-	url: link,
-	xhrFields: {
-		responseType: 'blob'
-	},
-})
+			otherButton1.disabled = false;
+			otherButton2.disabled = false;
+			otherButton3.disabled = false;
+			otherButton4.disabled = false;
+		}
+		fetch('/turn_off_auto', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+			.then(response => {
+				if (response.ok) {
+					console.log('Auto mode turn off successfully');
+				} else {
+					console.error('Error turning off Auto mode');
+				}
+			})
+			.catch(error => {
+				console.error('Error:', error);
+			});
+	}
 
-}
+	function handleClickLightOn() {
+		var lightMessage = document.getElementById('lightMessage');
+		// lightMessage.textContent = "Đèn quang hợp đang ON";
+		lightMessage.setAttribute("style", "color: green");
+
+		fetch('/turn_on_relay2', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ relay: 1 }),
+		})
+			.then(response => {
+				if (response.ok) {
+					console.log('Relay 1 turned on successfully');
+				} else {
+					console.error('Error turning on Relay 1');
+				}
+			})
+			.catch(error => {
+				console.error('Error:', error);
+			});
+
+	}
+
+	function handleClickLightOff() {
+		var lightMessage = document.getElementById('lightMessage');
+		// lightMessage.textContent = "Đèn quang hợp đang OFF";
+		lightMessage.setAttribute("style", "color: red");
+		
+		fetch('/turn_off_relay2', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ relay: 1 }),
+		})
+			.then(response => {
+				if (response.ok) {
+					console.log('Relay 1 turned on successfully');
+				} else {
+					console.error('Error turning on Relay 1');
+				}
+			})
+			.catch(error => {
+				console.error('Error:', error);
+			});
+
+	}
+
+	function handleClickPumptOn() {
+		var pumpMessage = document.getElementById('pumpMessage');
+		// pumpMessage.textContent = "Máy bơm đang ON";
+		pumpMessage.setAttribute("style", "color: green");
+		fetch('/turn_on_relay1', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ relay: 2 }),
+		})
+			.then(response => {
+				if (response.ok) {
+					console.log('Relay 2 turned on successfully');
+				} else {
+					console.error('Error turning on Relay 2');
+				}
+			})
+			.catch(error => {
+				console.error('Error:', error);
+			});
+
+	}
+
+	function handleClickPumptOff() {
+		var pumpMessage = document.getElementById('pumpMessage');
+		// pumpMessage.textContent = "Máy bơm đang OFF";
+		pumpMessage.setAttribute("style", "color: red");
+		fetch('/turn_off_relay1', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ relay: 2 }),
+		})
+			.then(response => {
+				if (response.ok) {
+					console.log('Relay 2 turned off successfully');
+				} else {
+					console.error('Error turning off Relay 1');
+				}
+			})
+			.catch(error => {
+				console.error('Error:', error);
+			});
+	}
 
 
 

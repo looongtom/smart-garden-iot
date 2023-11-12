@@ -10,8 +10,15 @@ import datetime
 import imutils
 import time
 import cv2
+import paho.mqtt.client as mqtt
 
-
+# MQTT broker information
+mqtt_broker = "192.168.1.10"
+mqtt_port = 1883
+mqtt_topic = "iot"
+relay_topic = "relay/control"
+relay_topic2 = "relay2/control"
+auto_topic = "auto/control"
 
 # initialize the output frame and a lock used to ensure thread-safe
 # exchanges of the output frames (useful when multiple browsers/tabs
@@ -30,25 +37,25 @@ from flask import Flask, request,render_template, redirect, url_for,jsonify
 
 received_data = {}  # Create a global variable to store received data
 
-@app.route('/data', methods=['POST'])
-def receive_data():
-    if request.method == 'POST':
-        # data = request.json  # Assuming the data sent by ESP8266 is in JSON format
-        data = request.json  # Assuming the data sent by ESP8266 is in JSON format
+def on_connect(client, userdata, flags, rc):
+    print(f"Connected with result code {rc}")
+    client.subscribe(mqtt_topic)
 
-        print("Received data from ESP8266:")
-        print(data)
+def on_message(client, userdata, msg):
+    global received_data
+    payload = msg.payload.decode()
+    print(f"Received message on topic {msg.topic}: {payload}")
+    # Update data dictionary with received JSON
+    received_data = payload
 
-        # Here, you can process the received data as needed
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_message = on_message
 
-        # return "Data received successfully", 200  # Respond with an acknowledgment
-        
-        global received_data
-        received_data = data
+client.connect(mqtt_broker, mqtt_port, 60)
 
-        # Redirect to the index() function to render the HTML template
-        return redirect(url_for('index'))
-
+# Start MQTT loop in a separate thread
+client.loop_start()
 
 @app.route('/')
 def index():
@@ -62,6 +69,102 @@ def camera():
 @app.route('/received_data')
 def get_data():
     return jsonify(received_data)
+# ===========================================================================================================
+@app.route('/turn_on_relay1', methods=['POST'])
+def turn_on_relay1():
+	# Extract data from the request
+    data = request.json
+
+    # Process the data (in this example, assuming data includes 'relay' key)
+    relay_number = data.get('relay')
+
+    # Perform actions based on the relay_number (you may turn on the relay here)
+    # Replace the following line with your actual relay control logic
+    client.publish(relay_topic, "ON")
+
+    print(f"Turning on relay {relay_number}")
+    # Dummy response for demonstration purposes
+    response_data = {'status': 'success', 'message': f'Relay {relay_number} turned on'}
+
+    return jsonify(response_data)
+
+@app.route('/turn_on_relay2', methods=['POST'])
+def turn_on_relay2():
+	# Extract data from the request
+    data = request.json
+
+    # Process the data (in this example, assuming data includes 'relay' key)
+    relay_number = data.get('relay')
+
+    # Perform actions based on the relay_number (you may turn on the relay here)
+    # Replace the following line with your actual relay control logic
+    client.publish(relay_topic2, "ON")
+
+    print(f"Turning on relay {relay_number}")
+    # Dummy response for demonstration purposes
+    response_data = {'status': 'success', 'message': f'Relay {relay_number} turned on'}
+
+    return jsonify(response_data)
+
+@app.route('/turn_off_relay1', methods=['POST'])
+def turn_off_relay1():
+	# Extract data from the request
+    data = request.json
+
+    # Process the data (in this example, assuming data includes 'relay' key)
+    relay_number = data.get('relay')
+
+    # Perform actions based on the relay_number (you may turn on the relay here)
+    # Replace the following line with your actual relay control logic
+    client.publish(relay_topic, "OFF")
+
+    print(f"Turning off relay {relay_number}")
+    # Dummy response for demonstration purposes
+    response_data = {'status': 'success', 'message': f'Relay {relay_number} turned off'}
+
+    return jsonify(response_data)
+
+@app.route('/turn_off_relay2', methods=['POST'])
+def turn_off_relay2():
+	# Extract data from the request
+    data = request.json
+
+    # Process the data (in this example, assuming data includes 'relay' key)
+    relay_number = data.get('relay')
+
+    # Perform actions based on the relay_number (you may turn on the relay here)
+    # Replace the following line with your actual relay control logic
+    client.publish(relay_topic2, "OFF")
+
+    print(f"Turning off relay {relay_number}")
+    # Dummy response for demonstration purposes
+    response_data = {'status': 'success', 'message': f'Relay {relay_number} turned off'}
+
+    return jsonify(response_data)
+
+@app.route('/turn_on_auto', methods=['POST'])
+def turn_on_auto():
+    # Perform actions based on the relay_number (you may turn on the relay here)
+    # Replace the following line with your actual relay control logic
+    client.publish(auto_topic, "ON")
+
+    print(f"Turning on auto mode")
+    # Dummy response for demonstration purposes
+    response_data = {'status': 'success', 'message': f'auto mode turned on'}
+
+    return jsonify(response_data)
+
+@app.route('/turn_off_auto', methods=['POST'])
+def turn_off_auto():
+    # Perform actions based on the relay_number (you may turn on the relay here)
+    # Replace the following line with your actual relay control logic
+    client.publish(auto_topic, "OFF")
+
+    print(f"Turning off auto mode")
+    # Dummy response for demonstration purposes
+    response_data = {'status': 'success', 'message': f'auto mode turned off'}
+
+    return jsonify(response_data)
 # ==============================================================================================
 @app.route("/view-camera")
 def view_camera():
