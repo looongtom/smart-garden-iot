@@ -5,4 +5,18 @@
 
 ## Hướng dẫn chạy file
 
-![image](https://github.com/looongtom/smart-garden-iot/assets/94033356/a5efd865-425b-4039-a893-575645d67927)
+1. Tạo file venv:
+2. 
+RUN CMD: python -m venv Venv
+
+![image](https://github.com/looongtom/smart-garden-iot/assets/94033356/6e6b430d-9b04-48b3-9a73-050a931626d4)
+
+4. Bắt đầu sử dụng venv
+5. 
+RUN CMD: Venv\Scripts\activate.bat
+
+6. Tải các thư viện cần thiết
+7. 
+RUN CMD: pip install <tên thư viện>
+
+
