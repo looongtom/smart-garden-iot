@@ -2,38 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MQTT Data Display</title>
+    <title>Tomato Disease Prediction</title>
 </head>
 <body>
-    <h1>MQTT Data</h1>
-    <p id="do_am">Loading...</p>
-
-    <script>
-        async function fetchData() {
-            try {
-                const response = await fetch('/received_data');
-                console.log('Response:', response);
-                const respData = await response.json();
-                console.log('Response data:', respData);
-                const data = JSON.parse(respData);
-                console.log('Data :', data);
-                console.log('Do am:', data.do_am);
-
-                
-                
-                document.getElementById('do_am').textContent = `Do Am: ${data.do_am}`;
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        }
-
-        // Fetch data when the page loads
-        fetchData();
-
-        // Set up an interval to periodically fetch data
-        setInterval(fetchData, 5000);  // Adjust the interval as needed
-    </script>
+    <h1>Tomato Disease Prediction</h1>
+    <form action="/predict" method="post" enctype="multipart/form-data">
+        <label for="image">Upload an image of a tomato plant:</label>
+        <input type="file" name="image" accept="image/*" required>
+        <br>
+        <input type="submit" value="Predict">
+    </form>
 </body>
 </html>
