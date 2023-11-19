@@ -22,6 +22,7 @@ from tensorflow.keras.models import load_model
 
 # MQTT broker information
 mqtt_broker = "192.168.1.4"
+
 mqtt_port = 1883
 mqtt_topic = "iot"
 relay_topic = "relay/control"
@@ -73,6 +74,10 @@ def index():
 @app.route('/camera')
 def camera():
     return render_template('camera.html')
+
+@app.route('/history')
+def history():
+    return render_template('history.html')
 
 @app.route('/received_data')
 def get_data():
