@@ -20,6 +20,14 @@ from tensorflow.keras.preprocessing.image import load_img
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
 
+from Model.lightRepository import LightRepository
+from Model.soilRepository import SoilRepository
+from Model.dht11 import DHT11Repository
+from Model.lightDevice import LightDeviceRepository
+from Model.pumpDevice import PumpDeviceRepository
+
+from datetime import datetime
+
 # MQTT broker information
 mqtt_broker = "192.168.1.4"
 
@@ -45,6 +53,7 @@ time.sleep(2.0)
 from flask import Flask, request,render_template, redirect, url_for,jsonify
 
 received_data = {}  # Create a global variable to store received data
+time_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
 def on_connect(client, userdata, flags, rc):
     print(f"Connected with result code {rc}")
@@ -81,6 +90,19 @@ def history():
 
 @app.route('/received_data')
 def get_data():
+    # Lưu cường độ ánh sáng
+    cuong_do_anh_sang = received_data.get("cuong_do_anh_sang")
+    light_repo = LightRepository()
+    light_repo.add_light_data(intensity=cuong_do_anh_sang, time_now=time_now)
+    # Lưu độ ẩm đất
+    do_am_dat=received_data.get("do_am_dat")
+    soil_repo = SoilRepository()
+    soil_repo.add_soil_data(SoilHumidity=do_am_dat, time_now=time_now)
+    # Lưu nhiệt độ, độ ẩm phòng
+    nhiet_do_phong = received_data.get("nhiet_do")
+    do_am_phong = received_data.get("do_am")
+    dht11_repo= DHT11Repository()
+    dht11_repo.add_dht11_data(Temperature=nhiet_do_phong,Humidity= do_am_phong, time_now=time_now)
     return jsonify(received_data)
 # ===========================================================================================================
 @app.route('/turn_on_relay1', methods=['POST'])
@@ -98,7 +120,11 @@ def turn_on_relay1():
     print(f"Turning on relay {relay_number}")
     # Dummy response for demonstration purposes
     response_data = {'status': 'success', 'message': f'Relay {relay_number} turned on'}
-
+    
+    # Lưu tạng thái máy bơm
+    pumpdevice_repo = PumpDeviceRepository()
+    pumpdevice_repo.add_pumpdevice_data(State= 'ON', time_now= time_now)
+    
     return jsonify(response_data)
 
 @app.route('/turn_on_relay2', methods=['POST'])
@@ -116,7 +142,11 @@ def turn_on_relay2():
     print(f"Turning on relay {relay_number}")
     # Dummy response for demonstration purposes
     response_data = {'status': 'success', 'message': f'Relay {relay_number} turned on'}
-
+    
+    # lưu trạng thái đèn
+    lightdevice_repo = LightDeviceRepository()
+    lightdevice_repo.add_lightdevice_data(State= 'ON', time_now= time_now)
+    
     return jsonify(response_data)
 
 @app.route('/turn_off_relay1', methods=['POST'])
@@ -134,7 +164,11 @@ def turn_off_relay1():
     print(f"Turning off relay {relay_number}")
     # Dummy response for demonstration purposes
     response_data = {'status': 'success', 'message': f'Relay {relay_number} turned off'}
-
+    
+    #Lưu trạng thái máy bơm
+    pumpdevice_repo = PumpDeviceRepository()
+    pumpdevice_repo.add_pumpdevice_data(State= 'OFF', time_now= time_now)
+    
     return jsonify(response_data)
 
 @app.route('/turn_off_relay2', methods=['POST'])
@@ -152,7 +186,11 @@ def turn_off_relay2():
     print(f"Turning off relay {relay_number}")
     # Dummy response for demonstration purposes
     response_data = {'status': 'success', 'message': f'Relay {relay_number} turned off'}
-
+    
+    #Lưu trạng thái đèn
+    lightdevice_repo = LightDeviceRepository()
+    lightdevice_repo.add_lightdevice_data(State= 'OFF', time_now= time_now)
+    
     return jsonify(response_data)
 
 @app.route('/turn_on_auto', methods=['POST'])
