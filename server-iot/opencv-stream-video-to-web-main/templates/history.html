@@ -92,18 +92,18 @@
 						<div class="collapse in" id="dashboardOverview">
 							<ul class="nav">
 								<li>
-									<a href="/">
+									<a href="overview.html">
 										<span class="sidebar-mini">O</span>
 										<span class="sidebar-normal">Overview</span>
 									</a>
 								</li>
-								<li  class="active">
-									<a href="/camera">
+								<li>
+									<a href="camera.html">
 										<span class="sidebar-mini">C</span>
 										<span class="sidebar-normal">Camera</span>
 									</a>
 								</li>
-								<li>
+								<li  class="active">
 									<a href="history.html">
 										<span class="sidebar-mini">H</span>
 										<span class="sidebar-normal">History</span>
@@ -131,7 +131,7 @@
 	                        <span class="icon-bar bar3"></span>
 	                    </button>
 	                    <a class="navbar-brand" href="#Dashboard">
-							Camera
+							History
 						</a>
 	                </div>
 	                <div class="collapse navbar-collapse">
@@ -176,26 +176,206 @@
 	        <div class="content">
 	            <div class="container-fluid">
 	                <div class="row">
-	                    <div class="col-md-6">
-	                        <div class="card">
-	                            <form id="registerFormValidation" action="" method="" novalidate="novalidate">
-									<h4 class="card-title">
-										Hình ảnh theo dõi trực tiếp
-									</h4>
-									<div class="card-content">
-									<img src="{{ url_for('video_feed') }}">
-									</div>
-	                            </form>
-	                        </div>
-                            <button class="btn btn-success btn-fill btn-wd">Chuẩn đoán từ hình ảnh trực tiếp</button>
+	                    <div class="col-md-12">
+	                        <div class="table-responsive">
+
+								<table class="table">
+								
+									<thead>
+								
+										<tr>
+								
+											<th class="text-center">#</th>
+								
+											<th>Thời gian</th>
+								
+											<th>Nhiệt độ</th>
+								
+											<th>Độ ẩm không khí</th>
+
+											<th>Độ ẩm đất</th>
+											
+											<th>Cường độ ánh sáng</th>
+								
+											<th class="text-right">Trạng thái máy bơm</th>
+								
+											<th class="text-right">Trạng thái đèn quang hợp</th>
+								
+										</tr>
+								
+									</thead>
+								
+									<tbody>
+								
+										<tr>
+								
+											<td class="text-center">1</td>
+								
+											<td class="text-center">08:30:20 16/11/2023</td>
+								
+											<td class="text-center">27°C</td>
+								
+											<td class="text-center">36%</td>
+
+											<td class="text-center">10%</td>
+
+											<td class="text-center">8.3 lux</td>
+
+											<td class="text-center">ON</td>
+								
+											<td class="text-center">OFF</td>
+								
+								
+										</tr>
+										<tr>
+								
+											<td class="text-center">2</td>
+								
+											<td class="text-center">08:30:20 16/11/2023</td>
+								
+											<td class="text-center">27°C</td>
+								
+											<td class="text-center">36%</td>
+
+											<td class="text-center">10%</td>
+
+											<td class="text-center">8.3 lux</td>
+
+											<td class="text-center">ON</td>
+								
+											<td class="text-center">OFF</td>
+								
+								
+										</tr>
+										<tr>
+								
+											<td class="text-center">3</td>
+								
+											<td class="text-center">08:30:20 16/11/2023</td>
+								
+											<td class="text-center">27°C</td>
+								
+											<td class="text-center">36%</td>
+
+											<td class="text-center">10%</td>
+
+											<td class="text-center">8.3 lux</td>
+
+											<td class="text-center">ON</td>
+								
+											<td class="text-center">OFF</td>
+								
+								
+										</tr>
+										<tr>
+								
+											<td class="text-center">4</td>
+								
+											<td class="text-center">08:30:20 16/11/2023</td>
+								
+											<td class="text-center">27°C</td>
+								
+											<td class="text-center">36%</td>
+
+											<td class="text-center">10%</td>
+
+											<td class="text-center">8.3 lux</td>
+
+											<td class="text-center">ON</td>
+								
+											<td class="text-center">OFF</td>
+								
+								
+										</tr>
+										<tr>
+								
+											<td class="text-center">5</td>
+								
+											<td class="text-center">08:30:20 16/11/2023</td>
+								
+											<td class="text-center">27°C</td>
+								
+											<td class="text-center">36%</td>
+
+											<td class="text-center">10%</td>
+
+											<td class="text-center">8.3 lux</td>
+
+											<td class="text-center">ON</td>
+								
+											<td class="text-center">OFF</td>
+								
+								
+										</tr>
+										<tr>
+								
+											<td class="text-center">6</td>
+								
+											<td class="text-center">08:30:20 16/11/2023</td>
+								
+											<td class="text-center">27°C</td>
+								
+											<td class="text-center">36%</td>
+
+											<td class="text-center">10%</td>
+
+											<td class="text-center">8.3 lux</td>
+
+											<td class="text-center">ON</td>
+								
+											<td class="text-center">OFF</td>
+								
+								
+										</tr>
+										<tr>
+								
+											<td class="text-center">7</td>
+								
+											<td class="text-center">08:30:20 16/11/2023</td>
+								
+											<td class="text-center">27°C</td>
+								
+											<td class="text-center">36%</td>
+
+											<td class="text-center">10%</td>
+
+											<td class="text-center">8.3 lux</td>
+
+											<td class="text-center">ON</td>
+								
+											<td class="text-center">OFF</td>
+								
+								
+										</tr>
+										<tr>
+								
+											<td class="text-center">8</td>
+								
+											<td class="text-center">08:30:20 16/11/2023</td>
+								
+											<td class="text-center">27°C</td>
+								
+											<td class="text-center">36%</td>
+
+											<td class="text-center">10%</td>
+
+											<td class="text-center">8.3 lux</td>
+
+											<td class="text-center">ON</td>
+								
+											<td class="text-center">OFF</td>
+								
+								
+										</tr>
+							
+								
+									</tbody>
+								
+								</table>
+								
+								</div>
 	                    </div>
-                        <div class="col-md-6">
-	                        <div class="card">
-								<img id="previewImage" src="#" alt="Preview">
-	                        </div>
-                            <button class="btn btn-success btn-fill btn-wd" id="uploadButton">Upload hình ảnh</button>
-                            <button class="btn btn-success btn-fill btn-wd">Chuẩn đoán từ hình ảnh upload</button>
-	                    </div>
+                        
 	                </div>
 					<div class="row">
 						
@@ -242,36 +422,5 @@
 			demo.initCirclePercentage();
 
     	});
-	</script>
-	<!-- <script src="main.js"></script> --><script>
-		document.getElementById('uploadButton').addEventListener('click', function () {
-  // Tạo một input type="file" ẩn
-  var input = document.createElement('input');
-  input.type = 'file';
-  
-  // Lắng nghe sự kiện khi người dùng chọn file
-  input.addEventListener('change', function (event) {
-    var file = event.target.files[0];
-  
-    // Tạo một đối tượng FileReader
-    var reader = new FileReader();
-  
-    // Xử lý sự kiện khi FileReader đã đọc xong file
-    reader.onload = function (e) {
-      // Lấy URL của ảnh đã tải lên
-      var imageUrl = e.target.result;
-      
-      // Hiển thị ảnh trước
-      var previewImage = document.getElementById('previewImage');
-      previewImage.src = imageUrl;
-    };
-  
-    // Đọc file như là một URL dạng dữ liệu (data URL)
-    reader.readAsDataURL(file);
-  });
-  
-  // Kích hoạt sự kiện click trên input ẩn
-  input.click();
-});
 	</script>
 </html>
