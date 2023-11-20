@@ -204,171 +204,19 @@
 										</tr>
 								
 									</thead>
-								
 									<tbody>
-								
-										<tr>
-								
-											<td class="text-center">1</td>
-								
-											<td class="text-center">08:30:20 16/11/2023</td>
-								
-											<td class="text-center">27°C</td>
-								
-											<td class="text-center">36%</td>
-
-											<td class="text-center">10%</td>
-
-											<td class="text-center">8.3 lux</td>
-
-											<td class="text-center">ON</td>
-								
-											<td class="text-center">OFF</td>
-								
-								
-										</tr>
-										<tr>
-								
-											<td class="text-center">2</td>
-								
-											<td class="text-center">08:30:20 16/11/2023</td>
-								
-											<td class="text-center">27°C</td>
-								
-											<td class="text-center">36%</td>
-
-											<td class="text-center">10%</td>
-
-											<td class="text-center">8.3 lux</td>
-
-											<td class="text-center">ON</td>
-								
-											<td class="text-center">OFF</td>
-								
-								
-										</tr>
-										<tr>
-								
-											<td class="text-center">3</td>
-								
-											<td class="text-center">08:30:20 16/11/2023</td>
-								
-											<td class="text-center">27°C</td>
-								
-											<td class="text-center">36%</td>
-
-											<td class="text-center">10%</td>
-
-											<td class="text-center">8.3 lux</td>
-
-											<td class="text-center">ON</td>
-								
-											<td class="text-center">OFF</td>
-								
-								
-										</tr>
-										<tr>
-								
-											<td class="text-center">4</td>
-								
-											<td class="text-center">08:30:20 16/11/2023</td>
-								
-											<td class="text-center">27°C</td>
-								
-											<td class="text-center">36%</td>
-
-											<td class="text-center">10%</td>
-
-											<td class="text-center">8.3 lux</td>
-
-											<td class="text-center">ON</td>
-								
-											<td class="text-center">OFF</td>
-								
-								
-										</tr>
-										<tr>
-								
-											<td class="text-center">5</td>
-								
-											<td class="text-center">08:30:20 16/11/2023</td>
-								
-											<td class="text-center">27°C</td>
-								
-											<td class="text-center">36%</td>
-
-											<td class="text-center">10%</td>
-
-											<td class="text-center">8.3 lux</td>
-
-											<td class="text-center">ON</td>
-								
-											<td class="text-center">OFF</td>
-								
-								
-										</tr>
-										<tr>
-								
-											<td class="text-center">6</td>
-								
-											<td class="text-center">08:30:20 16/11/2023</td>
-								
-											<td class="text-center">27°C</td>
-								
-											<td class="text-center">36%</td>
-
-											<td class="text-center">10%</td>
-
-											<td class="text-center">8.3 lux</td>
-
-											<td class="text-center">ON</td>
-								
-											<td class="text-center">OFF</td>
-								
-								
-										</tr>
-										<tr>
-								
-											<td class="text-center">7</td>
-								
-											<td class="text-center">08:30:20 16/11/2023</td>
-								
-											<td class="text-center">27°C</td>
-								
-											<td class="text-center">36%</td>
-
-											<td class="text-center">10%</td>
-
-											<td class="text-center">8.3 lux</td>
-
-											<td class="text-center">ON</td>
-								
-											<td class="text-center">OFF</td>
-								
-								
-										</tr>
-										<tr>
-								
-											<td class="text-center">8</td>
-								
-											<td class="text-center">08:30:20 16/11/2023</td>
-								
-											<td class="text-center">27°C</td>
-								
-											<td class="text-center">36%</td>
-
-											<td class="text-center">10%</td>
-
-											<td class="text-center">8.3 lux</td>
-
-											<td class="text-center">ON</td>
-								
-											<td class="text-center">OFF</td>
-								
-								
-										</tr>
-							
-								
+										{% for record in data %}
+											<tr>
+												<td class="text-center">{{ record.id }}</td>
+												<td class="text-center">{{ record.Time }}</td>
+												<td class="text-center">{{ record.Temperature }}</td>
+												<td class="text-center">{{ record.Humidity }}</td>
+												<td class="text-center">{{ record.Soil }}</td>
+												<td class="text-center">{{ record.Light }}</td>
+												<td class="text-center">{{ record.pump_state }}</td>
+												<td class="text-center">{{ record.light_state }}</td>
+											</tr>
+										{% endfor %}
 									</tbody>
 								
 								</table>
