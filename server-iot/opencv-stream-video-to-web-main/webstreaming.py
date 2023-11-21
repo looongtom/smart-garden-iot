@@ -6,7 +6,6 @@ from flask import Flask
 from flask import render_template
 import threading
 import argparse
-import datetime
 import imutils
 import time
 import cv2
@@ -325,7 +324,7 @@ def detect_motion(frameCount):
 		gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 		gray = cv2.GaussianBlur(gray, (7, 7), 0)
 		# grab the current timestamp and draw it on the frame
-		timestamp = datetime.datetime.now()
+		timestamp = datetime.now()
 		cv2.putText(frame, timestamp.strftime(
 			"%A %d %B %Y %I:%M:%S%p"), (20, frame.shape[0] - 10),
 			cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 1)
