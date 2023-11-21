@@ -12,6 +12,7 @@ import time
 import cv2
 
 import paho.mqtt.client as mqtt
+import json
 
 import numpy as np
 import os
@@ -31,7 +32,7 @@ from Model.diagnose import DiagnoseRepository
 from datetime import datetime
 
 # MQTT broker information
-mqtt_broker = "10.0.0.139"
+mqtt_broker = "192.168.1.7"
 
 mqtt_port = 1883
 mqtt_topic = "iot"
@@ -54,8 +55,7 @@ time.sleep(2.0)
 # =========================================================================================================
 from flask import Flask, request,render_template, redirect, url_for,jsonify
 
-received_data = {"do_am":46,"nhiet_do":24,"do_am_dat":37,"cuong_do_anh_sang":6.666666508,"light_status":"OFF","pump_status":"OFF","autoMode":"ON"}  # Create a global variable to store received data
-time_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+received_data = {}  # Create a global variable to store received data
 
 def on_connect(client, userdata, flags, rc):
     print(f"Connected with result code {rc}")
@@ -66,7 +66,7 @@ def on_message(client, userdata, msg):
     payload = msg.payload.decode()
     print(f"Received message on topic {msg.topic}: {payload}")
     # Update data dictionary with received JSON
-    received_data = payload
+    received_data = (payload)
 
 client = mqtt.Client()
 client.on_connect = on_connect
@@ -79,7 +79,7 @@ client.loop_start()
 
 @app.route('/')
 def index():
-    return render_template('overview.html', data=received_data)
+    return render_template('overview.html', data=(received_data))
     # return render_template('index.html', data=jsonify(received_data))
 
 @app.route('/camera')
@@ -94,29 +94,31 @@ def history():
 
 @app.route('/received_data')
 def get_data():
+    time_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    json_data = json.loads(received_data)
     # Lưu cường độ ánh sáng
-    cuong_do_anh_sang = received_data.get("cuong_do_anh_sang")
+    cuong_do_anh_sang = (json_data).get("cuong_do_anh_sang")
     light_repo = LightRepository()
     light_repo.add_light_data(intensity=cuong_do_anh_sang, time_now=time_now)
     
     # Lưu độ ẩm đất
-    do_am_dat=received_data.get("do_am_dat")
+    do_am_dat= (json_data).get("do_am_dat")
     soil_repo = SoilRepository()
     soil_repo.add_soil_data(SoilHumidity=do_am_dat, time_now=time_now)
     
     # Lưu nhiệt độ, độ ẩm phòng
-    nhiet_do_phong = received_data.get("nhiet_do")
-    do_am_phong = received_data.get("do_am")
+    nhiet_do_phong =  (json_data).get("nhiet_do")
+    do_am_phong =  (json_data).get("do_am")
     dht11_repo= DHT11Repository()
     dht11_repo.add_dht11_data(Temperature=nhiet_do_phong,Humidity= do_am_phong, time_now=time_now)
     
     # Lưu tạng thái máy bơm
-    pump_status = received_data.get("pump_status")
+    pump_status =  (json_data).get("pump_status")
     pumpdevice_repo = PumpDeviceRepository()
     pumpdevice_repo.add_pumpdevice_data(State= pump_status, time_now= time_now)
     
     # lưu trạng thái đèn
-    light_status = received_data.get("light_status")
+    light_status =  (json_data).get("light_status")
     lightdevice_repo = LightDeviceRepository()
     lightdevice_repo.add_lightdevice_data(State= light_status, time_now= time_now)
     
@@ -225,13 +227,15 @@ def turn_off_auto():
 
     return jsonify(response_data)
 # ==============================================================================================
-filepath = 'C:\\Users\\Hi\\OneDrive\\Documents\\GitHub\\smart-garden-iot\\server-iot\\opencv-stream-video-to-web-main\\model_custom.h5'
+filepath = 'model_custom.h5'
 model = load_model(filepath)
 print(model)
 
 print("Model Loaded Successfully")
 
 def pred_tomato_dieas(tomato_plant):
+  time_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
   test_image = load_img(tomato_plant, target_size = (128, 128)) # load image 
   print("@@ Got Image for prediction")
   

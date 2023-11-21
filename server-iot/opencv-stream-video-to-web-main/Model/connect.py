@@ -6,7 +6,7 @@ def create_connection():
             host="localhost",
             port=3306,
             user="root",
-            password="88888888",
+            password="tr1nhtu@n",
             database="iot"
         )
         if connection.is_connected():
