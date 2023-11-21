@@ -6,12 +6,12 @@ from flask import Flask
 from flask import render_template
 import threading
 import argparse
-import datetime
 import imutils
 import time
 import cv2
 
 import paho.mqtt.client as mqtt
+import json
 
 import numpy as np
 import os
@@ -20,8 +20,18 @@ from tensorflow.keras.preprocessing.image import load_img
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
 
+from Model.lightRepository import LightRepository
+from Model.soilRepository import SoilRepository
+from Model.dht11 import DHT11Repository
+from Model.lightDevice import LightDeviceRepository
+from Model.pumpDevice import PumpDeviceRepository
+from Model.history import HistoryRepository
+from Model.diagnose import DiagnoseRepository
+
+from datetime import datetime
+
 # MQTT broker information
-mqtt_broker = "192.168.1.4"
+mqtt_broker = "192.168.1.7"
 
 mqtt_port = 1883
 mqtt_topic = "iot"
@@ -55,7 +65,7 @@ def on_message(client, userdata, msg):
     payload = msg.payload.decode()
     print(f"Received message on topic {msg.topic}: {payload}")
     # Update data dictionary with received JSON
-    received_data = payload
+    received_data = (payload)
 
 client = mqtt.Client()
 client.on_connect = on_connect
@@ -68,7 +78,7 @@ client.loop_start()
 
 @app.route('/')
 def index():
-    return render_template('overview.html', data=received_data)
+    return render_template('overview.html', data=(received_data))
     # return render_template('index.html', data=jsonify(received_data))
 
 @app.route('/camera')
@@ -77,10 +87,43 @@ def camera():
 
 @app.route('/history')
 def history():
-    return render_template('history.html')
+    history_repo = HistoryRepository()
+    data = history_repo.get_history_data()
+    return render_template('history.html', data=data)
 
 @app.route('/received_data')
 def get_data():
+    time_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    json_data = json.loads(received_data)
+    # Lưu cường độ ánh sáng
+    cuong_do_anh_sang = (json_data).get("cuong_do_anh_sang")
+    light_repo = LightRepository()
+    light_repo.add_light_data(intensity=cuong_do_anh_sang, time_now=time_now)
+    
+    # Lưu độ ẩm đất
+    do_am_dat= (json_data).get("do_am_dat")
+    soil_repo = SoilRepository()
+    soil_repo.add_soil_data(SoilHumidity=do_am_dat, time_now=time_now)
+    
+    # Lưu nhiệt độ, độ ẩm phòng
+    nhiet_do_phong =  (json_data).get("nhiet_do")
+    do_am_phong =  (json_data).get("do_am")
+    dht11_repo= DHT11Repository()
+    dht11_repo.add_dht11_data(Temperature=nhiet_do_phong,Humidity= do_am_phong, time_now=time_now)
+    
+    # Lưu tạng thái máy bơm
+    pump_status =  (json_data).get("pump_status")
+    pumpdevice_repo = PumpDeviceRepository()
+    pumpdevice_repo.add_pumpdevice_data(State= pump_status, time_now= time_now)
+    
+    # lưu trạng thái đèn
+    light_status =  (json_data).get("light_status")
+    lightdevice_repo = LightDeviceRepository()
+    lightdevice_repo.add_lightdevice_data(State= light_status, time_now= time_now)
+    
+    # Lưu vào bảng history
+    history_repo = HistoryRepository()
+    history_repo.add_history_data(Time=time_now, Temperature= nhiet_do_phong, Humidity=do_am_phong, Light= cuong_do_anh_sang, Soil=do_am_dat, pump_state= pump_status, light_state= light_status )
     return jsonify(received_data)
 # ===========================================================================================================
 @app.route('/turn_on_relay1', methods=['POST'])
@@ -98,7 +141,7 @@ def turn_on_relay1():
     print(f"Turning on relay {relay_number}")
     # Dummy response for demonstration purposes
     response_data = {'status': 'success', 'message': f'Relay {relay_number} turned on'}
-
+    
     return jsonify(response_data)
 
 @app.route('/turn_on_relay2', methods=['POST'])
@@ -116,7 +159,7 @@ def turn_on_relay2():
     print(f"Turning on relay {relay_number}")
     # Dummy response for demonstration purposes
     response_data = {'status': 'success', 'message': f'Relay {relay_number} turned on'}
-
+    
     return jsonify(response_data)
 
 @app.route('/turn_off_relay1', methods=['POST'])
@@ -134,7 +177,11 @@ def turn_off_relay1():
     print(f"Turning off relay {relay_number}")
     # Dummy response for demonstration purposes
     response_data = {'status': 'success', 'message': f'Relay {relay_number} turned off'}
-
+    
+    #Lưu trạng thái máy bơm
+    pumpdevice_repo = PumpDeviceRepository()
+    pumpdevice_repo.add_pumpdevice_data(State= 'OFF', time_now= time_now)
+    
     return jsonify(response_data)
 
 @app.route('/turn_off_relay2', methods=['POST'])
@@ -152,7 +199,7 @@ def turn_off_relay2():
     print(f"Turning off relay {relay_number}")
     # Dummy response for demonstration purposes
     response_data = {'status': 'success', 'message': f'Relay {relay_number} turned off'}
-
+    
     return jsonify(response_data)
 
 @app.route('/turn_on_auto', methods=['POST'])
@@ -179,13 +226,15 @@ def turn_off_auto():
 
     return jsonify(response_data)
 # ==============================================================================================
-filepath = 'D:\IOT\Plant-Leaf-Disease-Prediction\model_custom.h5'
+filepath = 'model_custom.h5'
 model = load_model(filepath)
 print(model)
 
 print("Model Loaded Successfully")
 
 def pred_tomato_dieas(tomato_plant):
+  time_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
   test_image = load_img(tomato_plant, target_size = (128, 128)) # load image 
   print("@@ Got Image for prediction")
   
@@ -194,36 +243,46 @@ def pred_tomato_dieas(tomato_plant):
   
   result = model.predict(test_image) # predict diseased palnt or not
   print('@@ Raw result = ', result)
-  
+  diagnose_repo = DiagnoseRepository()
   pred = np.argmax(result, axis=1)
   print(pred)
   if pred==0:
+      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh đốm vi khuẩn (Bacteria Spot Disease)", Time=time_now )
       return "Tomato - Bệnh đốm vi khuẩn (Bacteria Spot Disease)", 'Tomato-Bacteria Spot.html'
        
   elif pred==1:
+      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh bạc lá sớm (Early Blight Disease)", Time=time_now )
       return "Tomato - Bệnh bạc lá sớm (Early Blight Disease)", 'Tomato-Early_Blight.html'
         
   elif pred==2:
+      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Khoẻ mạnh", Time=time_now )
       return "Tomato - Khoẻ mạnh", 'Tomato-Healthy.html'
         
   elif pred==3:
+      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh mốc sương (Late Blight Disease)", Time=time_now )
       return "Tomato - Bệnh mốc sương (Late Blight Disease)", 'Tomato - Late_blight.html'
        
   elif pred==4:
+      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh mốc lá (Leaf Mold Disease)", Time=time_now )
       return "Tomato - Bệnh mốc lá (Leaf Mold Disease)", 'Tomato - Leaf_Mold.html'
         
   elif pred==5:
+      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh đốm lá Septoria (Septoria Leaf Spot Disease)", Time=time_now )
       return "Tomato - Bệnh đốm lá Septoria (Septoria Leaf Spot Disease)", 'Tomato - Septoria_leaf_spot.html'
         
   elif pred==6:
+      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh đốm mục chấm (Target Spot Disease)", Time=time_now )
       return "Tomato - Bệnh đốm mục chấm (Target Spot Disease)", 'Tomato - Target_Spot.html'
         
   elif pred==7:
+      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh virus vàng lá xoăn (Yellow Leaf Curl Virus Disease)", Time=time_now )
       return "Tomato - Bệnh virus vàng lá xoăn (Yellow Leaf Curl Virus Disease)", 'Tomato - Tomato_Yellow_Leaf_Curl_Virus.html'
   elif pred==8:
+      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh khảm virus (Tomato Mosaic Virus Disease)", Time=time_now )
       return "Tomato - Bệnh khảm virus (Tomato Mosaic Virus Disease)", 'Tomato - Tomato_mosaic_virus.html'
         
   elif pred==9:
+      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh nhện đỏ hai đốm (Two Spotted Spider Mite Disease)", Time=time_now )
       return "Tomato - Bệnh nhện đỏ hai đốm (Two Spotted Spider Mite Disease)", 'Tomato - Two-spotted_spider_mite.html'
 
 
@@ -265,7 +324,7 @@ def detect_motion(frameCount):
 		gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 		gray = cv2.GaussianBlur(gray, (7, 7), 0)
 		# grab the current timestamp and draw it on the frame
-		timestamp = datetime.datetime.now()
+		timestamp = datetime.now()
 		cv2.putText(frame, timestamp.strftime(
 			"%A %d %B %Y %I:%M:%S%p"), (20, frame.shape[0] - 10),
 			cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 1)
