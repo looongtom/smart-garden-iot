@@ -184,11 +184,15 @@
 										Hình ảnh theo dõi trực tiếp
 									</h4>
 									<div class="card-content">
-										<img src="{{ url_for('video_feed') }}">
+										<img id="downloadImg" src="{{ url_for('video_feed') }}" alt="Downloadable Image">
+										<button onclick="downloadImage()">Download Image</button>
+
 									</div>
 								</form>
 							</div>
-							<button class="btn btn-success btn-fill btn-wd">Chuẩn đoán từ hình ảnh trực tiếp</button>
+							<a href="/capture">
+								<button class="btn btn-success btn-fill btn-wd">Chuẩn đoán từ hình ảnh trực tiếp</button>
+							</a>
 						</div>
 						<div class="col-md-6">
 							<div class="card">
@@ -273,6 +277,47 @@
 
 <!-- Paper Dashboard PRO DEMO methods, don't include it in your project! -->
 <script src="static/assets/js/demo.js"></script>
+
+<script>
+    function downloadImage() {
+        // Get the image element by its ID
+        var imgElement = document.getElementById("downloadImg");
+
+        // Create a canvas element to draw the image
+        var canvas = document.createElement("canvas");
+        var context = canvas.getContext("2d");
+        canvas.width = imgElement.width;
+        canvas.height = imgElement.height;
+        context.drawImage(imgElement, 0, 0, canvas.width, canvas.height);
+
+        // Convert the canvas content to a data URL
+        var dataUrl = canvas.toDataURL("image/png");
+
+        // // Create a link element to trigger the download
+        var downloadLink = document.createElement("a");
+        downloadLink.href = dataUrl;
+        downloadLink.download = "downloaded_image.png";
+
+        // // Trigger a click event on the link to start the download
+        downloadLink.click();
+
+		/* var formData = new FormData();
+        formData.append("image", dataUrl);
+
+        // Send an AJAX request to the server
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/predict", true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Handle the response from the server if needed
+                console.log(xhr.responseText);
+            }
+        };
+
+        // Send the FormData containing the image to the server
+        xhr.send(formData); */
+    }
+</script>
 
 <script type="text/javascript">
 	$(document).ready(function () {

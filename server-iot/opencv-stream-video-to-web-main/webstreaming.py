@@ -30,6 +30,8 @@ from Model.diagnose import DiagnoseRepository
 
 from datetime import datetime
 
+from cv2 import (VideoCapture, namedWindow, imshow, waitKey, destroyWindow, imwrite)  
+
 # MQTT broker information
 mqtt_broker = "192.168.1.7"
 
@@ -248,42 +250,42 @@ def pred_tomato_dieas(tomato_plant):
   print(pred)
   if pred==0:
       diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh đốm vi khuẩn (Bacteria Spot Disease)", Time=time_now )
-      return "Tomato - Bệnh đốm vi khuẩn (Bacteria Spot Disease)", 'Tomato-Bacteria Spot.html'
+      return "Tomato - Bệnh đốm vi khuẩn (Bacteria Spot Disease)", 'prediction/Tomato-Bacteria Spot.html'
        
   elif pred==1:
       diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh bạc lá sớm (Early Blight Disease)", Time=time_now )
-      return "Tomato - Bệnh bạc lá sớm (Early Blight Disease)", 'Tomato-Early_Blight.html'
+      return "Tomato - Bệnh bạc lá sớm (Early Blight Disease)", 'prediction/Tomato-Early_Blight.html'
         
   elif pred==2:
       diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Khoẻ mạnh", Time=time_now )
-      return "Tomato - Khoẻ mạnh", 'Tomato-Healthy.html'
+      return "Tomato - Khoẻ mạnh", 'prediction/Tomato-Healthy.html'
         
   elif pred==3:
       diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh mốc sương (Late Blight Disease)", Time=time_now )
-      return "Tomato - Bệnh mốc sương (Late Blight Disease)", 'Tomato - Late_blight.html'
+      return "Tomato - Bệnh mốc sương (Late Blight Disease)", 'prediction/Tomato - Late_blight.html'
        
   elif pred==4:
       diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh mốc lá (Leaf Mold Disease)", Time=time_now )
-      return "Tomato - Bệnh mốc lá (Leaf Mold Disease)", 'Tomato - Leaf_Mold.html'
+      return "Tomato - Bệnh mốc lá (Leaf Mold Disease)", 'prediction/Tomato - Leaf_Mold.html'
         
   elif pred==5:
       diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh đốm lá Septoria (Septoria Leaf Spot Disease)", Time=time_now )
-      return "Tomato - Bệnh đốm lá Septoria (Septoria Leaf Spot Disease)", 'Tomato - Septoria_leaf_spot.html'
-        
+      return "Tomato - Bệnh đốm lá Septoria (Septoria Leaf Spot Disease)", 'prediction/Tomato - Septoria_leaf_spot.html'
+
   elif pred==6:
       diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh đốm mục chấm (Target Spot Disease)", Time=time_now )
-      return "Tomato - Bệnh đốm mục chấm (Target Spot Disease)", 'Tomato - Target_Spot.html'
-        
+      return "Tomato - Bệnh đốm mục chấm (Target Spot Disease)", 'prediction/Tomato - Target_Spot.html'
+
   elif pred==7:
       diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh virus vàng lá xoăn (Yellow Leaf Curl Virus Disease)", Time=time_now )
-      return "Tomato - Bệnh virus vàng lá xoăn (Yellow Leaf Curl Virus Disease)", 'Tomato - Tomato_Yellow_Leaf_Curl_Virus.html'
+      return "Tomato - Bệnh virus vàng lá xoăn (Yellow Leaf Curl Virus Disease)", 'prediction/Tomato - Tomato_Yellow_Leaf_Curl_Virus.html'
   elif pred==8:
       diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh khảm virus (Tomato Mosaic Virus Disease)", Time=time_now )
-      return "Tomato - Bệnh khảm virus (Tomato Mosaic Virus Disease)", 'Tomato - Tomato_mosaic_virus.html'
+      return "Tomato - Bệnh khảm virus (Tomato Mosaic Virus Disease)", 'prediction/Tomato - Tomato_mosaic_virus.html'
         
   elif pred==9:
       diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh nhện đỏ hai đốm (Two Spotted Spider Mite Disease)", Time=time_now )
-      return "Tomato - Bệnh nhện đỏ hai đốm (Two Spotted Spider Mite Disease)", 'Tomato - Two-spotted_spider_mite.html'
+      return "Tomato - Bệnh nhện đỏ hai đốm (Two Spotted Spider Mite Disease)", 'prediction/Tomato - Two-spotted_spider_mite.html'
 
 
 @app.route("/predict", methods = ['GET','POST'])
@@ -354,7 +356,7 @@ def detect_motion(frameCount):
 
 def generate():
 	# grab global references to the output frame and lock variables
-	global outputFrame, lock
+	global outputFrame, lock,captured
 	# loop over frames from the output stream
 	while True:
 		# wait until the lock is acquired
@@ -378,6 +380,34 @@ def video_feed():
 	# type (mime type)
 	return Response(generate(),
 		mimetype = "multipart/x-mixed-replace; boundary=frame")
+
+@app.route("/capture")
+def capture():
+    cam_port = 0
+    cam = VideoCapture(cam_port) 
+    # reading the input using the camera 
+    result, image = cam.read() 
+    if result: 
+        currentDateAndTime = datetime.now()
+        currentDateAndTime=currentDateAndTime.strftime("%d_%b_%y_%H_%M_%S")
+        imageName = "image_"+str(currentDateAndTime)+".png"
+        file_path = os.path.join('./server-iot/opencv-stream-video-to-web-main/upload/capture/', imageName)
+
+        print(file_path)
+        # showing result, it take frame name and image  
+        # output 
+        imshow(file_path, image) 
+    
+        # saving image in local storage 
+        imwrite(file_path, image) 
+        # D:\IOT\smart-garden-iot\server-iot\opencv-stream-video-to-web-main\upload
+        
+    # If captured image is corrupted, moving to else part 
+    else: 
+        print("No image detected. Please! try again") 
+
+    return render_template('camera.html')
+
 
 # check to see if this is the main thread of execution
 if __name__ == '__main__':
