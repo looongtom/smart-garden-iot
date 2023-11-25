@@ -90,6 +90,18 @@ def history():
     history_repo = HistoryRepository()
     data = history_repo.get_history_data()
     return render_template('history.html', data=data)
+    
+@app.route('/diagnose')
+def diagnose():
+    return render_template('diagnose.html')   
+
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')   
+
+@app.route('/create')
+def create():
+    return render_template('create.html')
 
 @app.route('/received_data')
 def get_data():
