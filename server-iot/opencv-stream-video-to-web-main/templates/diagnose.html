@@ -59,26 +59,18 @@
 
 	                    <div class="collapse" id="collapseExample">
 	                        <ul class="nav">
-	                            <ul class="nav">
-									<li>
-										<a href="/profile">
-											<span class="sidebar-mini">Mp</span>
-											<span class="sidebar-normal">My Profile</span>
-										</a>
-									</li>
-									<li>
-										<a href="/create">
-											<span class="sidebar-mini">Cu</span>
-											<span class="sidebar-normal">Create User</span>
-										</a>
-									</li>
-									<li>
-										<a href="/diagnose">
-											<span class="sidebar-mini">D</span>
-											<span class="sidebar-normal">Diagnose</span>
-										</a>
-									</li>
-								</ul>
+	                            <li>
+									<a href="/profile">
+										<span class="sidebar-mini">Mp</span>
+										<span class="sidebar-normal">My Profile</span>
+									</a>
+								</li>
+								<li>
+									<a href="/create">
+										<span class="sidebar-mini">Cu</span>
+										<span class="sidebar-normal">Create User</span>
+									</a>
+								</li>
 	                        </ul>
 	                    </div>
 	                </div>
@@ -105,13 +97,13 @@
 										<span class="sidebar-normal">Camera</span>
 									</a>
 								</li>
-								<li  class="active">
+								<li>
 									<a href="/history">
 										<span class="sidebar-mini">H</span>
 										<span class="sidebar-normal">History</span>
 									</a>
 								</li>
-								<li>
+								<li class="active">
 									<a href="/diagnose">
 										<span class="sidebar-mini">D</span>
 										<span class="sidebar-normal">Diagnose</span>
@@ -197,34 +189,21 @@
 								
 											<th>Thời gian</th>
 								
-											<th>Nhiệt độ</th>
+											<th>Hình ảnh</th>
 								
-											<th>Độ ẩm không khí</th>
-
-											<th>Độ ẩm đất</th>
-											
-											<th>Cường độ ánh sáng</th>
-								
-											<th class="text-right">Trạng thái máy bơm</th>
-								
-											<th class="text-right">Trạng thái đèn quang hợp</th>
+											<th>Bệnh chuẩn đoán</th>
 								
 										</tr>
 								
 									</thead>
 									<tbody>
-										{% for record in data %}
+										<!-- {% for record in data %} -->
 											<tr>
-												<td class="text-center">{{ record.id }}</td>
-												<td class="text-center">{{ record.Time }}</td>
-												<td class="text-center">{{ record.Temperature }}</td>
-												<td class="text-center">{{ record.Humidity }}</td>
-												<td class="text-center">{{ record.Soil }}</td>
-												<td class="text-center">{{ record.Light }}</td>
-												<td class="text-center">{{ record.pump_state }}</td>
-												<td class="text-center">{{ record.light_state }}</td>
+												<td class="text-center">1</td>
+												<td class="text-center">1</td>
+												<td class="text-center">1</td>
 											</tr>
-										{% endfor %}
+										<!-- {% endfor %} -->
 									</tbody>
 								
 								</table>
