@@ -197,13 +197,14 @@
 								
 									</thead>
 									<tbody>
-										<!-- {% for record in data %} -->
+										{% for record in data %}
 											<tr>
-												<td class="text-center">1</td>
-												<td class="text-center">1</td>
-												<td class="text-center">1</td>
+												<td class="text-center">{{ record.id }}</td>
+												<td class="text-center">{{ record.Link_image }}</td>
+												<td class="text-center">{{ record.Diagnose }}</td>
+												<td class="text-center">{{ record.Time }}</td>
 											</tr>
-										<!-- {% endfor %} -->
+										{% endfor %}
 									</tbody>
 								
 								</table>
