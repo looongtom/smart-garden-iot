@@ -31,7 +31,7 @@ from Model.diagnose import DiagnoseRepository
 from datetime import datetime
 
 # MQTT broker information
-mqtt_broker = "192.168.1.7"
+mqtt_broker = "192.168.0.107"
 
 mqtt_port = 1883
 mqtt_topic = "iot"
@@ -93,7 +93,9 @@ def history():
     
 @app.route('/diagnose')
 def diagnose():
-    return render_template('diagnose.html')   
+    history_repo = DiagnoseRepository()
+    data = history_repo.get_diagnose_data()
+    return render_template('diagnose.html', data=data)   
 
 @app.route('/profile')
 def profile():
@@ -102,6 +104,11 @@ def profile():
 @app.route('/create')
 def create():
     return render_template('create.html')
+
+    
+@app.route('/login')
+def login():
+    return render_template('login.html')
 
 @app.route('/received_data')
 def get_data():
