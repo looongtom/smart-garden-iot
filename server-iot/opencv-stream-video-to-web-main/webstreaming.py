@@ -30,8 +30,21 @@ from Model.diagnose import DiagnoseRepository
 
 from datetime import datetime
 
+from cloudinary.uploader import upload
+import cloudinary
+import requests
+
+from PIL import Image
+from io import BytesIO
+
+cloudinary.config(
+    cloud_name="dsjuckdxu",
+    api_key="973371356842627",
+    api_secret="zJ5bMJgfkw3XBdyBocwO8Kgs1us"
+)
+
 # MQTT broker information
-mqtt_broker = "192.168.0.107"
+mqtt_broker = "192.168.1.9"
 
 mqtt_port = 1883
 mqtt_topic = "iot"
@@ -89,7 +102,7 @@ def camera():
 def history():
     history_repo = HistoryRepository()
     data = history_repo.get_history_data()
-    return render_template('history.html', data=data)
+    return render_template('history1.html', data=data)
     
 @app.route('/diagnose')
 def diagnose():
@@ -254,7 +267,11 @@ print("Model Loaded Successfully")
 def pred_tomato_dieas(tomato_plant):
   time_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-  test_image = load_img(tomato_plant, target_size = (128, 128)) # load image 
+  image_url = cloudinary.utils.cloudinary_url(tomato_plant)[0] #Đọc image từ cloudinary
+  response = requests.get(image_url)
+  image_content = response.content
+
+  test_image = load_img(BytesIO(image_content), target_size = (128, 128)) # load image 
   print("@@ Got Image for prediction")
   
   test_image = img_to_array(test_image)/255 # convert image to np array and normalize
@@ -309,16 +326,21 @@ def pred_tomato_dieas(tomato_plant):
 def predict():
      if request.method == 'POST':
         file = request.files['image'] # fet input
-        filename = file.filename        
-        print("@@ Input posted = ", filename)
+
+        result = upload(file)
+        public_url = result['secure_url']
+        print(public_url)
+
+        # filename = file.filename        
+        # print("@@ Input posted = ", filename)
         
-        file_path = os.path.join('./upload/', filename)
-        file.save(file_path)
+        # file_path = os.path.join('./upload/', filename)
+        # file.save(file_path)
 
         print("@@ Predicting class......")
-        pred, output_page = pred_tomato_dieas(tomato_plant=file_path)
+        pred, output_page = pred_tomato_dieas(tomato_plant=public_url)
               
-        return render_template(output_page, pred_output = pred, user_image = file_path)
+        return render_template(output_page, pred_output = pred, user_image = public_url)
 # ==========================================================================================================
 @app.route("/view-camera")
 def view_camera():
