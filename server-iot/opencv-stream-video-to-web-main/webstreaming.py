@@ -116,17 +116,26 @@ def profile():
     username = session['username']
 
     if request.method == 'POST':
-        new_username = request.form['username']
-        new_password = request.form['password']
+        current_password = request.form['current_password']
+        new_password = request.form['new_password']
+        confirm_password = request.form['confirm_password']
 
         cursor = conn.cursor()
-        cursor.execute('UPDATE account SET username = %s, password = %s WHERE username = %s', (new_username, new_password, username))
-        conn.commit()
-        cursor.close()
+        cursor.execute('SELECT password FROM account WHERE username = %s', (username,))
+        result = cursor.fetchone()
+        if result and result[0] == current_password:
+            if new_password == confirm_password:
+                cursor.execute('UPDATE account SET password = %s WHERE username = %s', (new_password, username))
+                conn.commit()
+                cursor.close()
 
-        flash('Thông tin cá nhân đã được cập nhật thành công!', 'success')
-        session['username'] = new_username
-        return redirect('/')
+                flash('Mật khẩu đã được cập nhật thành công!', 'success')
+                return redirect('/')
+            else:
+                flash('Xác nhận mật khẩu không khớp!', 'error')
+        else:
+            flash('Mật khẩu hiện tại không chính xác!', 'error')
+            cursor.close()
 
     return render_template('profile.html', username=username)
 
