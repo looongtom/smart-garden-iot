@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="test.css" />
+
+    <title>Dự đoán bệnh</title>
+</head>
+
+<body  background="{{url_for('static',filename = 'img/background/Back.jpg')}}">
+    <div>
+        <h1 style="text-align:center;font-size:2rem; margin-bottom: 0px;">Predict Tomato Leaf Disease & Get Cure</h1>
+    </div>
+   <br>
+   <br>
+    <div>
+        <div class="details">
+            <h1 class="text-d3">
+                {{pred_output}} </h1>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <span>
+                    <img src="{{url_for('static',filename = 'images/Tomato___Late_blight.JPG' )}}" alt="User Image" style="width:500px;height:500px;">
+                </span>
+            </div>
+            <div class="col-sm1">
+                <div class="details3">
+                    <h4 class="text-d1"><b> Cách chữa trị : </b> </h4>
+                </div>
+                <div class="details1">	
+                    <h6 class="text-d2">  
+                        Để kiểm soát bệnh bạc lá, hãy cắt tỉa và tiêu hủy những cành bị nhiễm bệnh. Nếu bệnh bạc lá đã xuất hiện trong vườn nho của bạn, hãy phun thuốc diệt nấm vào mùa xuân và mùa hè. Hãy nhớ rằng thuốc diệt nấm có thể gây hại cho môi trường, vì vậy hãy đọc nhãn trước khi sử dụng. Nếu bạn không muốn sử dụng thuốc diệt nấm, hãy chọn các giống nho kháng bệnh.
+                    </h6>
+                </div>
+            </div>
+        </div>
+        <button onclick="goBack()">Back</button>
+    </div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+
+</html>

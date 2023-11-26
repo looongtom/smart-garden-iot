@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="test.css" />
+
+    <title>Dự đoán bệnh</title>
+</head>
+
+<body  background="{{url_for('static',filename = 'img/background/Back.jpg')}}">
+    <div>
+        <h1 style="text-align:center;font-size:2rem; margin-bottom: 0px;">Predict Tomato Leaf Disease & Get Cure</h1>
+    </div>
+   <br>
+   <br>
+    <div>
+        <div class="details">
+            <h1 class="text-d3">
+                {{pred_output}} </h1>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <span>
+                    <img src="{{url_for('static',filename = 'images/Tomato___Late_blight.JPG' )}}" alt="User Image" style="width:500px;height:500px;">
+                </span>
+            </div>
+            <div class="col-sm1">
+                <div class="details3">
+                    <h4 class="text-d1"><b> Cách chữa trị : </b> </h4>
+                </div>
+                <div class="details1">	
+                    <h6 class="text-d2">  
+                        Trong nhiều trường hợp, áp dụng các biện pháp canh tác hợp lý để duy trì sức khỏe tốt cho cây khoai tây và cà chua sẽ giữ cho tổn thất do bệnh bạc lá sớm ở mức thấp hơn mức kinh tế. Bởi vì mầm bệnh qua mùa đông trên tàn dư cây trồng bị nhiễm bệnh nên các quy trình vệ sinh tại đồng ruộng giúp giảm lượng vi khuẩn lây nhiễm ban đầu ở các vụ tiếp theo là có lợi. Cần cân nhắc việc loại bỏ các vật liệu có khả năng bị nhiễm bệnh như dây leo và trái cây mục nát khỏi vùng lân cận ruộng sản xuất. Kiểm soát các loài cỏ dại và cỏ dại, chẳng hạn như cây cà ri và cây tầm ma, vốn là vật chủ thay thế cho bệnh, trước khi trồng cây trồng mới sẽ giúp giảm nguy cơ lây truyền bệnh. Đảm bảo hạt giống hoặc cây cấy không có mầm bệnh trước khi đưa ra đồng ruộng và luân canh ruộng sang cây ký chủ không nhạy cảm cũng sẽ giúp giảm sự tích tụ vật liệu cấy trong đất. Độ trưởng thành tối ưu của củ là yếu tố quan trọng nhất để kiểm soát nhiễm trùng củ. Củ thu hoạch trước khi trưởng thành dễ bị tổn thương và nhiễm trùng. Có thể giảm nhiễm trùng củ bằng cách xử lý cẩn thận trong quá trình thu hoạch để giảm thiểu vết thương cũng như tránh thu hoạch trong điều kiện ẩm ướt nếu có thể. Củ nên được bảo quản ở nhiệt độ 50 đến 55 F, ở độ ẩm tương đối cao và thông khí nhiều để thúc đẩy quá trình lành vết thương, điều này sẽ làm giảm số lượng và mức độ nghiêm trọng của nhiễm trùng củ phát triển trong quá trình bảo quản.
+                    </h6>
+                </div>
+            </div>
+        </div>
+        <button onclick="goBack()">Back</button>
+    </div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="test.css" />
+
+    <title>Dự đoán bệnh</title>
+</head>
+
+<body  background="{{url_for('static',filename = 'img/background/Back.jpg')}}">
+    <div>
+        <h1 style="text-align:center;font-size:2rem; margin-bottom: 0px;">Predict Tomato Leaf Disease & Get Cure</h1>
+    </div>
+   <br>
+   <br>
+    <div>
+        <div class="details">
+            <h1 class="text-d3">
+                {{pred_output}} </h1>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <span>
+                    <img src="{{url_for('static',filename = 'images/Tomato___Late_blight.JPG' )}}" alt="User Image" style="width:500px;height:500px;">
+                </span>
+            </div>
+            <div class="col-sm1">
+                <div class="details3">
+                    <h4 class="text-d1"><b> Cách chữa trị : </b> </h4>
+                </div>
+                <div class="details1">	
+                    <h6 class="text-d2">  
+                        Sử dụng hạt giống sạch bệnh\nTrồng đầu vụ để thoát khỏi áp lực dịch bệnh cao\nKhông để nước đọng lâu trên lá\nThường xuyên theo dõi cây và loại bỏ những cây bị nhiễm bệnh, củ bị nhiễm bệnh, cây tình nguyện và cỏ dại\nVệ sinh dụng cụ, thiết bị sau khi rời ruộng\nĐăng ký để nhận thông báo tại trang web USAblight\nGiữ củ ở nơi khô ráo và ở nhiệt độ thấp (38°F)\nGiống cây trồng chịu được khi có thể\nBảo vệ cây trồng bằng thuốc diệt nấm.
+                    </h6>
+                </div>
+            </div>
+        </div>
+        <button onclick="goBack()">Back</button>
+    </div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="test.css" />
+
+    <title>Dự đoán bệnh</title>
+</head>
+
+<body  background="{{url_for('static',filename = 'img/background/Back.jpg')}}">
+    <div>
+        <h1 style="text-align:center;font-size:2rem; margin-bottom: 0px;">Predict Tomato Leaf Disease & Get Cure</h1>
+    </div>
+   <br>
+   <br>
+    <div>
+        <div class="details">
+            <h1 class="text-d3">
+                {{pred_output}} </h1>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <span>
+                    <img src="{{url_for('static',filename = 'images/Tomato___Late_blight.JPG' )}}" alt="User Image" style="width:500px;height:500px;">
+                </span>
+            </div>
+            <div class="col-sm1">
+                <div class="details3">
+                    <h4 class="text-d1"><b> Cách chữa trị : </b> </h4>
+                </div>
+                <div class="details1">	
+                    <h6 class="text-d2">  
+                        Hiện nay, chưa có chiến lược quản lý hiệu quả bệnh sởi. Những người trồng nho làm rượu vang với những vườn nho nhỏ thường yêu cầu nhân viên hiện trường loại bỏ những quả bị nhiễm bệnh trước khi thu hoạch. Nho khô bị bệnh sởi sẽ bị loại bỏ trong quá trình thu hoạch hoặc tại nhà đóng gói, trong khi người trồng nho sẽ để lại quả bị bệnh trên cây nho. Nghiên cứu hiện tại tập trung vào việc bảo vệ các vết cắt tỉa khỏi bị nhiễm nấm để giảm thiểu nấm nghi ngờ xâm nhập vào vết thương mới.
+                    </h6>
+                </div>
+            </div>
+        </div>
+        <button onclick="goBack()">Back</button>
+    </div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+
+</html>
