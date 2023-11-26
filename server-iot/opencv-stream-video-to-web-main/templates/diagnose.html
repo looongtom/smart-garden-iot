@@ -207,7 +207,11 @@
 											<tr>
 												<td class="text-center">{{ record.id }}</td>
 												<td class="text-center">{{ record.Time }}</td>
-												<td class="text-center">{{ record.Link_image }}</td>
+												<td class="text-center">
+													
+													<img src="{{ record.Link_image }}" style="width: 300px; height: 300px;">
+
+												</td>
 												<td class="text-center">{{ record.Diagnose }}</td>
 											</tr>
 										{% endfor %}
