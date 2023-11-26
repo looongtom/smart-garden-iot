@@ -72,6 +72,12 @@
 										<span class="sidebar-normal">Create User</span>
 									</a>
 								</li>
+								<li>
+									<a href="/logout">
+										<span class="sidebar-mini">Lo</span>
+										<span class="sidebar-normal">Log Out</span>
+									</a>
+								</li>
 							</ul>
 						</div>
 					</div>
@@ -177,48 +183,25 @@
 			<div class="content">
 	            <div class="container-fluid">
 	                <div class="row">
-	                    <div class="col-lg-4 col-md-5">
-	                        <div class="card card-user">
-	                            <div class="image">
-	                                <img src="static/assets/img/background.jpg" alt="..."/>
-	                            </div>
-	                            <div class="card-content">
-	                                <div class="author">
-	                                  <img class="avatar border-white" src="static/assets/img/faces/face-2.jpg" alt="..."/>
-	                                  <h4 class="card-title"><br />
-	                                     <a href="#"><small></small></a>
-	                                  </h4>
-	                                </div>
-	                        
-	                            </div>
-	                            <hr>
-	                            
-	                        </div>
-	                    </div>
+	                
 	                    <div class="col-lg-8 col-md-7">
 	                        <div class="card">
 	                            <div class="card-header">
 	                                <h4 class="card-title">Edit Profile</h4>
 	                            </div>
 	                            <div class="card-content">
-	                                <form>
+	                                <form method="POST" action="/profile">
 	                                    <div class="row">
-	                                        <div class="col-md-5">
-	                                            <div class="form-group">
-	                                                <label>Role</label>
-	                                                <input type="text" class="form-control border-input" disabled placeholder="Company" value="Admin">
-	                                            </div>
-	                                        </div>
-	                                        <div class="col-md-3">
+	                                        <div class="col-md-6">
 	                                            <div class="form-group">
 	                                                <label>Username</label>
-	                                                <input type="text" class="form-control border-input" placeholder="Username" value="admin">
+	                                                <input class="form-control border-input" type="text" id="username" name="username" value="{{ username }}" >
 	                                            </div>
 	                                        </div>
-	                                        <div class="col-md-4">
+	                                        <div class="col-md-6">
 	                                            <div class="form-group">
 	                                                <label for="exampleInputEmail1">Password</label>
-	                                                <input type="password" class="form-control border-input" placeholder="****">
+	                                                <input class="form-control border-input" type="password" id="password" name="password" >
 	                                            </div>
 	                                        </div>
 	                                    </div>

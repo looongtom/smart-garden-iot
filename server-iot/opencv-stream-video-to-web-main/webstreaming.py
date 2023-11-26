@@ -30,8 +30,13 @@ from Model.diagnose import DiagnoseRepository
 
 from datetime import datetime
 
+from flask import request, flash, session
+
+from Model.connect import create_connection
+
+
 # MQTT broker information
-mqtt_broker = "192.168.0.107"
+mqtt_broker = "192.168.0.108"
 
 mqtt_port = 1883
 mqtt_topic = "iot"
@@ -46,6 +51,7 @@ outputFrame = None
 lock = threading.Lock()
 # initialize a flask object
 app = Flask(__name__)
+app.secret_key = b'\x9b\xfa\xa8\x85\xf2\xce\x1e\x13\x0b\xd8\x84\xac\x04\xed\x9e\xe9\xd8\x7e\x2b\x90\x6b\xfa\x2d'
 # initialize the video stream and allow the camera sensor to
 # warmup
 #vs = VideoStream(usePiCamera=1).start()
@@ -78,6 +84,10 @@ client.loop_start()
 
 @app.route('/')
 def index():
+    if 'username' not in session:
+        return redirect('/login')
+
+    username = session['username']
     return render_template('overview.html', data=(received_data))
     # return render_template('index.html', data=jsonify(received_data))
 
@@ -97,18 +107,86 @@ def diagnose():
     data = history_repo.get_diagnose_data()
     return render_template('diagnose.html', data=data)   
 
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
 def profile():
-    return render_template('profile.html')   
+    conn = create_connection()
+    if 'username' not in session:
+        return redirect('/login')
 
-@app.route('/create')
-def create():
-    return render_template('create.html')
+    username = session['username']
 
+    if request.method == 'POST':
+        new_username = request.form['username']
+        new_password = request.form['password']
+
+        cursor = conn.cursor()
+        cursor.execute('UPDATE account SET username = %s, password = %s WHERE username = %s', (new_username, new_password, username))
+        conn.commit()
+        cursor.close()
+
+        flash('Thông tin cá nhân đã được cập nhật thành công!', 'success')
+        session['username'] = new_username
+        return redirect('/')
+
+    return render_template('profile.html', username=username)
+
+
+@app.route('/create', methods=['GET', 'POST'])
+def create_user():
+    conn = create_connection()
+    if 'username' not in session:
+        return redirect('/login')
+
+    # Kiểm tra vai trò của người dùng
+    username = session['username']
+    cursor = conn.cursor()
+    cursor.execute('SELECT role FROM account WHERE username = %s', (username,))
+    user_role = cursor.fetchone()
+    cursor.close()
+
+    if user_role and user_role[0] == 1:
+        if request.method == 'POST':
+            new_username = request.form['username']
+            new_password = request.form['password']
+
+            cursor = conn.cursor()
+            cursor.execute('INSERT INTO account (username, password, role) VALUES (%s, %s, %s)', (new_username, new_password, 0))
+            conn.commit()
+            cursor.close()
+
+            flash('Người dùng đã được tạo thành công!', 'success')
+            return redirect('/')
+
+        return render_template('create.html')
+    else:
+        flash('Bạn không có quyền truy cập vào trang này.', 'error')
+        return redirect('/')
     
-@app.route('/login')
+@app.route('/login', methods = ['get', 'post'])
 def login():
+    conn = create_connection()
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        cursor = conn.cursor()
+        cursor.execute('SELECT username, password FROM account WHERE username = %s', (username,))
+        user = cursor.fetchone()
+        cursor.close()
+
+        if user and user[1] == password:
+            session['username'] = username
+            flash('Đăng nhập thành công!', 'success')
+            return redirect('/')
+        else:
+            flash('Tên người dùng hoặc mật khẩu không đúng.', 'error')
+
     return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect('/login')
 
 @app.route('/received_data')
 def get_data():

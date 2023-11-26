@@ -72,6 +72,12 @@
 										<span class="sidebar-normal">Create User</span>
 									</a>
 								</li>
+								<li>
+									<a href="/logout">
+										<span class="sidebar-mini">Lo</span>
+										<span class="sidebar-normal">Log Out</span>
+									</a>
+								</li>
 							</ul>
 						</div>
 					</div>
@@ -183,18 +189,18 @@
 	                                <h4 class="card-title">Create User</h4>
 	                            </div>
 	                            <div class="card-content">
-	                                <form>
+	                                <form method="POST" action="{{ url_for('create_user') }}">
 	                                    <div class="row">
 	                                        <div class="col-md-6">
 	                                            <div class="form-group">
 	                                                <label>UserName</label>
-	                                                <input type="text" class="form-control border-input" placeholder="Username" value="">
+	                                                <input type="text" id="username" name="username" class="form-control border-input" placeholder="Username" value="">
 	                                            </div>
 	                                        </div>
 	                                        <div class="col-md-6">
 	                                            <div class="form-group">
 	                                                <label>Password</label>
-	                                                <input type="text" class="form-control border-input" placeholder="Password" value="">
+	                                                <input type="password" id="password" name="password" class="form-control border-input" placeholder="Password" value="">
 	                                            </div>
 	                                        </div>
 	                                    </div>
