@@ -50,7 +50,7 @@ cloudinary.config(
 )
 
 # MQTT broker information
-mqtt_broker = "192.168.1.9"
+mqtt_broker = "192.168.0.108"
 
 mqtt_port = 1883
 mqtt_topic = "iot"
@@ -187,12 +187,12 @@ def create_user():
             conn.commit()
             cursor.close()
 
-            flash('Người dùng đã được tạo thành công!', 'success')
+            # flash('Người dùng đã được tạo thành công!', 'success')
             return redirect('/')
 
         return render_template('create.html')
     else:
-        flash('Bạn không có quyền truy cập vào trang này.', 'error')
+        # flash('Bạn không có quyền truy cập vào trang này.', 'error')
         return redirect('/')
     
 @app.route('/login', methods = ['get', 'post'])
@@ -209,10 +209,10 @@ def login():
 
         if user and user[1] == password:
             session['username'] = username
-            flash('Đăng nhập thành công!', 'success')
+            # flash('Đăng nhập thành công!', 'success')
             return redirect('/')
-        else:
-            flash('Tên người dùng hoặc mật khẩu không đúng.', 'error')
+        # else:
+            # flash('Tên người dùng hoặc mật khẩu không đúng.', 'error')
 
     return render_template('login.html')
 
