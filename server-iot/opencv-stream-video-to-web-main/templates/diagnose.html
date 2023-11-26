@@ -71,6 +71,12 @@
 										<span class="sidebar-normal">Create User</span>
 									</a>
 								</li>
+								<li>
+									<a href="/logout">
+										<span class="sidebar-mini">Lo</span>
+										<span class="sidebar-normal">Log Out</span>
+									</a>
+								</li>
 	                        </ul>
 	                    </div>
 	                </div>
@@ -187,11 +193,11 @@
 								
 											<th class="text-center">#</th>
 								
-											<th>Thời gian</th>
+											<th class="text-center">Thời gian</th>
 								
-											<th>Hình ảnh</th>
+											<th class="text-center">Hình ảnh</th>
 								
-											<th>Bệnh chuẩn đoán</th>
+											<th class="text-center">Bệnh chuẩn đoán</th>
 								
 										</tr>
 								
@@ -200,9 +206,9 @@
 										{% for record in data %}
 											<tr>
 												<td class="text-center">{{ record.id }}</td>
+												<td class="text-center">{{ record.Time }}</td>
 												<td class="text-center">{{ record.Link_image }}</td>
 												<td class="text-center">{{ record.Diagnose }}</td>
-												<td class="text-center">{{ record.Time }}</td>
 											</tr>
 										{% endfor %}
 									</tbody>
