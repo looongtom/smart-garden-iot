@@ -107,22 +107,30 @@ def index():
 
 @app.route('/camera')
 def camera():
+    if 'username' not in session:
+        return redirect('/login')
     return render_template('camera.html')
 
 @app.route('/history')
 def history():
+    if 'username' not in session:
+        return redirect('/login')
     history_repo = HistoryRepository()
     data = history_repo.get_history_data()
     return render_template('history1.html', data=data)
     
 @app.route('/diagnose')
 def diagnose():
+    if 'username' not in session:
+        return redirect('/login')
     history_repo = DiagnoseRepository()
     data = history_repo.get_diagnose_data()
     return render_template('diagnose.html', data=data)   
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
+    if 'username' not in session:
+        return redirect('/login')
     conn = create_connection()
     if 'username' not in session:
         return redirect('/login')
@@ -147,6 +155,8 @@ def profile():
 
 @app.route('/create', methods=['GET', 'POST'])
 def create_user():
+    if 'username' not in session:
+        return redirect('/login')
     conn = create_connection()
     if 'username' not in session:
         return redirect('/login')
@@ -204,6 +214,8 @@ def logout():
 
 @app.route('/received_data')
 def get_data():
+    if 'username' not in session:
+        return redirect('/login')
     time_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     json_data = json.loads(received_data)
     # Lưu cường độ ánh sáng
@@ -403,6 +415,8 @@ def pred_tomato_dieas(tomato_plant):
 
 @app.route("/predict", methods = ['GET','POST'])
 def predict():
+     if 'username' not in session:
+        return redirect('/login')
      if request.method == 'POST':
         file = request.files['image'] # fet input
 
@@ -424,7 +438,10 @@ def predict():
 @app.route("/view-camera")
 def view_camera():
 	# return the rendered template
-	return render_template("index.html")
+    if 'username' not in session:
+     return redirect('/login')
+	
+    return render_template("index.html")
 
 def detect_motion(frameCount):
 	# grab global references to the video stream, output frame, and

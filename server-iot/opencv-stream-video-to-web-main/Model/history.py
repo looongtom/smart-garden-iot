@@ -16,7 +16,7 @@ class HistoryRepository:
         if conn:
             with conn:
                 cursor = conn.cursor(dictionary=True)
-                query = "SELECT * FROM history;"
+                query = "SELECT * FROM history order by time desc;"
                 cursor.execute(query)
                 data = cursor.fetchall()
         return data
