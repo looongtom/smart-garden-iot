@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="test.css" />
+
+    <title>Dự đoán bệnh</title>
+</head>
+
+<body  background="{{url_for('static',filename = 'img/background/Back.jpg')}}">
+    <div>
+        <h1 style="text-align:center;font-size:2rem; margin-bottom: 0px;">Predict Tomato Leaf Disease & Get Cure</h1>
+    </div>
+   <br>
+   <br>
+    <div>
+        <div class="details">
+            <h1 class="text-d3">
+                {{pred_output}} </h1>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <span>
+                    <img src="{{url_for('static',filename = 'images/Tomato___Late_blight.JPG' )}}" alt="User Image" style="width:500px;height:500px;">
+                </span>
+            </div>
+            <div class="col-sm1">
+                <div class="details3">
+                    <h4 class="text-d1"><b> Cách chữa trị : </b> </h4>
+                </div>
+                <div class="details1">	
+                    <h6 class="text-d2">  
+                        Loại bỏ những lá bị nhiễm bệnh: Loại bỏ những lá bị nhiễm bệnh ngay lập tức và nhớ rửa tay và cắt tỉa thật kỹ trước khi làm việc với những cây không bị nhiễm bệnh.\nXem xét các lựa chọn thuốc diệt nấm hữu cơ: Thuốc diệt nấm có chứa đồng hoặc kali bicarbonate sẽ giúp ngăn ngừa sự lây lan của bệnh. Bắt đầu phun thuốc ngay khi các triệu chứng đầu tiên xuất hiện và làm theo hướng dẫn trên nhãn để tiếp tục quản lý.\nXem xét thuốc diệt nấm hóa học: Mặc dù các lựa chọn hóa học không phải là lý tưởng nhưng chúng có thể là lựa chọn duy nhất để kiểm soát tình trạng nhiễm trùng nặng. Một trong những loại ít độc nhất và hiệu quả nhất là chlorothalonil (được bán dưới tên Fungonil và Daconil).
+                    </h6>
+                </div>
+            </div>
+        </div>
+        <button onclick="goBack()">Back</button>
+    </div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+
+</html>

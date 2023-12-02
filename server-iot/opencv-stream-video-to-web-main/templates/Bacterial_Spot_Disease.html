@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="test.css" />
+
+    <title>Dự đoán bệnh</title>
+</head>
+
+<body  background="{{url_for('static',filename = 'img/background/Back.jpg')}}">
+    <div>
+        <h1 style="text-align:center;font-size:2rem; margin-bottom: 0px;">Predict Tomato Leaf Disease & Get Cure</h1>
+    </div>
+   <br>
+   <br>
+    <div>
+        <div class="details">
+            <h1 class="text-d3">
+                {{pred_output}} </h1>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <span>
+                    <img src="{{url_for('static',filename = 'images/Tomato___Late_blight.JPG' )}}" alt="User Image" style="width:500px;height:500px;">
+                </span>
+            </div>
+            <div class="col-sm1">
+                <div class="details3">
+                    <h4 class="text-d1"><b> Cách chữa trị : </b> </h4>
+                </div>
+                <div class="details1">	
+                    <h6 class="text-d2">  
+                        Thuốc diệt nấm đồng là phương pháp điều trị được khuyên dùng phổ biến nhất đối với bệnh đốm lá do vi khuẩn. Sử dụng thuốc diệt nấm đồng như một biện pháp phòng ngừa sau khi bạn gieo hạt nhưng trước khi chuyển cây vào nơi ở cố định của chúng. Bạn có thể phun thuốc diệt nấm đồng trước hoặc sau khi mưa, nhưng không nên phun thuốc diệt nấm đồng khi trời đang mưa. Nếu bạn thấy dấu hiệu của bệnh đốm lá do vi khuẩn, hãy phun thuốc diệt nấm đồng trong thời gian từ 7 đến 10 ngày, sau đó phun lại trong một tuần sau khi cây được chuyển ra ruộng. Thực hiện xử lý bảo trì 10 ngày một lần khi thời tiết khô ráo và 5 đến 7 ngày một lần khi thời tiết mưa.
+                    </h6>
+                </div>
+            </div>
+        </div>
+        <button onclick="goBack()">Back</button>
+    </div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+
+</html>
