@@ -50,7 +50,7 @@ cloudinary.config(
 )
 
 # MQTT broker information
-mqtt_broker = "192.168.0.108"
+mqtt_broker = "192.168.1.8"
 
 mqtt_port = 1883
 mqtt_topic = "iot"
@@ -358,7 +358,7 @@ def turn_off_auto():
 
     return jsonify(response_data)
 # ==============================================================================================
-filepath = 'model_custom.h5'
+filepath = 'model.h5'
 model = load_model(filepath)
 print(model)
 
@@ -383,43 +383,91 @@ def pred_tomato_dieas(tomato_plant):
   pred = np.argmax(result, axis=1)
   print(pred)
   if pred==0:
-      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh đốm vi khuẩn (Bacteria Spot Disease)", Time=time_now )
-      return "Tomato - Bệnh đốm vi khuẩn (Bacteria Spot Disease)", 'Tomato-Bacteria Spot.html'
-       
+        diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Apple - Bệnh ghẻ (Apple Scab Disease)", Time=time_now )
+        return "Apple - Bệnh ghẻ (Apple Scab Disease)", 'Apple_Scab_Disease.html'
   elif pred==1:
-      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh bạc lá sớm (Early Blight Disease)", Time=time_now )
-      return "Tomato - Bệnh bạc lá sớm (Early Blight Disease)", 'Tomato-Early_Blight.html'
-        
+        diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Apple - Bệnh thối đen (Apple Black Rot)", Time=time_now )
+        return "Apple - Bệnh thối đen (Apple Black Rot)", 'Apple_Black_Rot.html'
   elif pred==2:
-      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Khoẻ mạnh", Time=time_now )
-      return "Tomato - Khoẻ mạnh", 'Tomato-Healthy.html'
-        
+        diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Apple - Bệnh gỉ sắt táo (Cedar Apple Rust)", Time=time_now )
+        return "Apple - Bệnh gỉ sắt táo (Cedar Apple Rust)", 'Common_Rust.html'
   elif pred==3:
-      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh mốc sương (Late Blight Disease)", Time=time_now )
-      return "Tomato - Bệnh mốc sương (Late Blight Disease)", 'Tomato - Late_blight.html'
-       
+        diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Apple - Không có bệnh", Time=time_now )
+        return "Apple - Không có bệnh", 'Apple_Healthy.html'
   elif pred==4:
-      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh mốc lá (Leaf Mold Disease)", Time=time_now )
-      return "Tomato - Bệnh mốc lá (Leaf Mold Disease)", 'Tomato - Leaf_Mold.html'
-        
+        diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Không phải hình ảnh lá cây", Time=time_now )
+        return "Không phải hình ảnh lá cây", 'No_Leaves.html'
   elif pred==5:
-      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh đốm lá Septoria (Septoria Leaf Spot Disease)", Time=time_now )
-      return "Tomato - Bệnh đốm lá Septoria (Septoria Leaf Spot Disease)", 'Tomato - Septoria_leaf_spot.html'
-        
+        diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Đốm lá Cercospora/Đốm lá xám (Cercospora Leaf Spot/Gray Leaf Spot)", Time=time_now )
+        return "Đốm lá Cercospora/Đốm lá xám (Cercospora Leaf Spot/Gray Leaf Spot)", 'Cercospora_Leaf_Spot.html'
   elif pred==6:
-      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh đốm mục chấm (Target Spot Disease)", Time=time_now )
-      return "Tomato - Bệnh đốm mục chấm (Target Spot Disease)", 'Tomato - Target_Spot.html'
-        
+        diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Corn - Bệnh gỉ sắt (Common Rust)", Time=time_now )
+        return "Corn - Bệnh gỉ sắt (Common Rust)", 'Common_Rust.html'
   elif pred==7:
-      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh virus vàng lá xoăn (Yellow Leaf Curl Virus Disease)", Time=time_now )
-      return "Tomato - Bệnh virus vàng lá xoăn (Yellow Leaf Curl Virus Disease)", 'Tomato - Tomato_Yellow_Leaf_Curl_Virus.html'
+        diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Corn - Bệnh bạc lá (Northern Leaf Blight)", Time=time_now )
+        return "Corn - Bệnh bạc lá (Northern Leaf Blight)", 'Northern_Leaf_Blight.html'
   elif pred==8:
-      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh khảm virus (Tomato Mosaic Virus Disease)", Time=time_now )
-      return "Tomato - Bệnh khảm virus (Tomato Mosaic Virus Disease)", 'Tomato - Tomato_mosaic_virus.html'
-        
+        diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Corn - Không có bệnh", Time=time_now )
+        return "Corn - Không có bệnh", 'Corn_Healthy.html'
   elif pred==9:
+        diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Grape - Bệnh đốm lá (Black Rot)", Time=time_now )
+        return "Grape - Bệnh đốm lá (Black Rot)", 'Grape_Black_Rot.html'
+  elif pred==10:
+        diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Grape - Bệnh sở đen (Esca (Black Measles))", Time=time_now )
+        return "Grape - Bệnh sở đen (Esca (Black Measles))", 'Esca.html'
+  elif pred==11:
+        diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Grape - Bệnh bạc lá (Leaf Blight (Isariopsis Leaf Spot))", Time=time_now )
+        return "Grape - Bệnh bạc lá (Leaf Blight (Isariopsis Leaf Spot))", 'Leaf_Blight.html'
+  elif pred==12:
+        diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Grape - Không có bệnh", Time=time_now )
+        return "Grape - Không có bệnh", 'Grape_Healthy.html'        
+  elif pred==13:
+        diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Potato - Bệnh bạc lá sớm (Early Blight)", Time=time_now )
+        return "Potato - Bệnh bạc lá sớm (Early Blight)", 'Early_Blight_Disease.html'
+  elif pred==14:
+        diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Potato - Bệnh mốc sương (Late Blight)", Time=time_now )
+        return "Potato - Bệnh mốc sương (Late Blight)", 'Late_Blight_Disease.html'
+  elif pred==15:
+        diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Potato - Không có bệnh", Time=time_now )
+        return "Potato - Không có bênh", 'Potato_Healthy.html'
+  elif pred==16:
+      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh đốm vi khuẩn (Bacteria Spot Disease)", Time=time_now )
+      return "Tomato - Bệnh đốm vi khuẩn (Bacteria Spot Disease)", 'Bacterial_Spot_Disease.html'
+       
+  elif pred==17:
+      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh bạc lá sớm (Early Blight Disease)", Time=time_now )
+      return "Tomato - Bệnh bạc lá sớm (Early Blight Disease)", 'Early_Blight_Disease.html'
+        
+  elif pred==18:
+      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Khoẻ mạnh", Time=time_now )
+      return "Tomato - Khoẻ mạnh", 'Tomato_Healthy.html'
+        
+  elif pred==19:
+      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh mốc sương (Late Blight Disease)", Time=time_now )
+      return "Tomato - Bệnh mốc sương (Late Blight Disease)", 'Late_Blight_Disease.html'
+       
+  elif pred==20:
+      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh mốc lá (Leaf Mold Disease)", Time=time_now )
+      return "Tomato - Bệnh mốc lá (Leaf Mold Disease)", 'Leaf_Mold_Disease.html'
+        
+  elif pred==21:
+      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh đốm lá Septoria (Septoria Leaf Spot Disease)", Time=time_now )
+      return "Tomato - Bệnh đốm lá Septoria (Septoria Leaf Spot Disease)", 'Septoria_Leaf_Spot_Disease.html'
+        
+  elif pred==22:
+      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh đốm mục chấm (Target Spot Disease)", Time=time_now )
+      return "Tomato - Bệnh đốm mục chấm (Target Spot Disease)", 'Target_Spot_Disease.html'
+        
+  elif pred==23:
+      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh virus vàng lá xoăn (Yellow Leaf Curl Virus Disease)", Time=time_now )
+      return "Tomato - Bệnh virus vàng lá xoăn (Yellow Leaf Curl Virus Disease)", 'Yellow_Leaf_Curl_Virus_Disease.html'
+  elif pred==24:
+      diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh khảm virus (Tomato Mosaic Virus Disease)", Time=time_now )
+      return "Tomato - Bệnh khảm virus (Tomato Mosaic Virus Disease)", 'Mosaic_Virus.html'
+        
+  elif pred==25:
       diagnose_repo.add_diagnose_data(Link_image= tomato_plant, Diagnose= "Tomato - Bệnh nhện đỏ hai đốm (Two Spotted Spider Mite Disease)", Time=time_now )
-      return "Tomato - Bệnh nhện đỏ hai đốm (Two Spotted Spider Mite Disease)", 'Tomato - Two-spotted_spider_mite.html'
+      return "Tomato - Bệnh nhện đỏ hai đốm (Two Spotted Spider Mite Disease)", 'Two_Spotted_Spider_Mite_Disease.html'
 
 
 @app.route("/predict", methods = ['GET','POST'])
