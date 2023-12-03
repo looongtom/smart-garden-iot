@@ -16,7 +16,7 @@ class DiagnoseRepository:
         if conn:
             with conn:
                 cursor = conn.cursor(dictionary=True)
-                query = "SELECT * FROM diagnose;"
+                query = "SELECT * FROM diagnose order by time desc;"
                 cursor.execute(query)
                 data = cursor.fetchall()
         return data
